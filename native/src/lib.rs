@@ -1,9 +1,10 @@
 use neon::prelude::*;
 use glob::glob;
 use std::path::PathBuf;
-use std::fs;
 
 mod datatypes;
+mod utility;
+mod parser;
 
 // Will Change result type later
 fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
@@ -44,32 +45,19 @@ fn get_all_bibtex_files(file_path: String) -> NeonResult<Vec<PathBuf>> {
 
 fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
-    let path_list = js_string_array_to_vec(path_list_js_array, &mut cx)?;
+    let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
+    let file_contents = utility::read_files_into_strings(path_list)?;
 
-    let mut file_contents: Vec<String> = Vec::new();
-
-    // Read all files as strings
-    for path in path_list {
-        let file_content = fs::read_to_string(path).expect("Something went wrong reading a file");
-        file_contents.push(file_content);
+    for file_content in file_contents {
+        // TODO: Create parser
+        // bibtex_parser::parse_file_string(file_content)
+        parser::bibtex_parser::parse_bibtex_string(file_content);
     }
 
     let return_value: Handle<JsString> = cx.string("Temp return value");
     Ok(return_value)
 }
 
-
-fn js_string_array_to_vec(js_array: Handle<JsArray>, cx: &mut FunctionContext) -> NeonResult<Vec<String>> {
-    // convert to string vec
-    let js_vec: Vec<Handle<JsValue>> = js_array.to_vec(cx)?;
-    let mut string_vec: Vec<String> = Vec::new();
-    for (_, item) in js_vec.iter().enumerate() {
-        let js_string = item.downcast::<JsString, FunctionContext>(cx).unwrap();
-        string_vec.push(js_string.value(cx));
-    }
-
-    Ok(string_vec)
-}
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
