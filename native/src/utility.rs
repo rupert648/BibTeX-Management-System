@@ -25,3 +25,7 @@ pub fn read_files_into_strings(path_list: Vec<String>) -> NeonResult<Vec<String>
 
     Ok(file_contents)
 }
+
+pub fn print_error_message(error_message: String) {
+    println!("----------\nerror: \n{}\n---------", error_message)
+}
