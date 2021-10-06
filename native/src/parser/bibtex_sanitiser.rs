@@ -37,6 +37,17 @@ fn is_equal_curly_brackets(entry: &str) -> bool {
 }
 
 fn is_equal_quotations(entry: &str) -> bool {
-    // TODO: What if they use escape character 😧😧
-    entry.matches("\"").count() % 2 == 0
+    let mut numb_quotes = 0;
+    let mut escaped_char = false;
+    for c in entry.chars() {
+        if c == '\\' {
+            escaped_char = true;
+        } else if c == '"' && !escaped_char {
+            numb_quotes += 1;
+        } else {
+            escaped_char = false;
+        }
+    }
+
+    numb_quotes % 2 == 0
 }

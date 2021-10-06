@@ -2,9 +2,9 @@ pub use crate::datatypes::field::Field;
 
 #[derive(Debug)]
 pub struct BibEntry {
-    entry_type: String,
-    name: String,
-    fields: Vec<Field>,
+    pub entry_type: String,
+    pub name: String,
+    pub fields: Vec<Field>,
 }
 
 impl Default for BibEntry {

@@ -1,6 +1,7 @@
 use neon::prelude::*;
 use glob::glob;
 use std::path::PathBuf;
+use crate::datatypes::bibentry::BibEntry;
 
 mod datatypes;
 mod utility;
@@ -47,12 +48,12 @@ fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
     let file_contents = utility::read_files_into_strings(path_list)?;
-
+    let mut entries: Vec<BibEntry> = Vec::new();
     for file_content in file_contents {
-        // TODO: Create parser
-        // bibtex_parser::parse_file_string(file_content)
-        parser::bibtex_parser::parse_bibtex_string(file_content);
+        entries = parser::bibtex_parser::parse_bibtex_string(file_content)?;
     }
+
+    println!("{:?}", entries);
 
     let return_value: Handle<JsString> = cx.string("Temp return value");
     Ok(return_value)

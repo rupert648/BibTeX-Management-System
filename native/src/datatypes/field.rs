@@ -1,5 +1,5 @@
 #[derive(Debug)]
 pub struct Field {
-    field_name: String,
-    field_value: String
+    pub field_name: String,
+    pub field_value: String
 }
