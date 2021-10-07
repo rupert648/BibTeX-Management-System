@@ -1,3 +1,7 @@
+#![warn(missing_docs)]
+
+//! This crate contains "JS functions" for neon, allowing the user to read, merge and collate BibTex Files
+
 use neon::prelude::*;
 use std::path::PathBuf;
 use crate::datatypes::bibentry::BibEntry;
@@ -7,8 +11,12 @@ mod utility;
 mod parser;
 mod volume_search;
 
-// Will Change result type later
-fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
+/// Searches a given path and its sub directories for .bib files.
+///
+/// Given that the argument is not a JSString, an error will be thrown to the
+/// javascript runtime. If the path does not exist or is improperly formatted. An error will
+/// be thrown to the javascript runtime. **Note this can only be called from the JS Runtime**
+pub fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
     let path_handle = cx.argument::<JsString>(0)?;
     let path_list: Vec<PathBuf> = volume_search::get_all_bibtex_files(path_handle.value(&mut cx))?;
 
@@ -26,9 +34,12 @@ fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
     Ok(js_return_array)
 }
 
-// takes an array of bibtex file paths and merges them into one bibtex file
-// TODO:
-fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
+/// Given an array of file paths, merges these into a singular .bib file - removing any duplicates
+/// 
+/// Will parse these files, search all entries for duplicates or near duplicates, and then interact
+/// with the user to decide how to handle all of these. **Note this can only be called from the JS Runtime**
+pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
+    // TODO: Check all paths are .bib files
     let path_list_js_array = cx.argument::<JsArray>(0)?;
 
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
@@ -45,7 +56,19 @@ fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
     Ok(return_value)
 }
 
-fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsArray> {
+/// Given a .bib file path will parse it, and return the entries as a JS array of objects.
+/// 
+/// Given a .bib path it will parse the file, throwing an error if any sanitisation errors are found.
+/// It will return the JS object from a Rust Struct, which for each entry has the following format:
+/// ```
+/// pub struct BibEntry {
+///    pub entry_type: String,
+///    pub name: String,
+///    pub fields: Vec<Field>,
+///}
+/// ```
+pub fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsArray> {
+    // TODO: check all paths are .bib files
     let path_arg = cx.argument::<JsString>(0)?;
     let path = path_arg.value(&mut cx);
 
