@@ -1,16 +1,16 @@
 use neon::prelude::*;
-use glob::glob;
 use std::path::PathBuf;
 use crate::datatypes::bibentry::BibEntry;
 
 mod datatypes;
 mod utility;
 mod parser;
+mod volume_search;
 
 // Will Change result type later
 fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
     let path_handle = cx.argument::<JsString>(0)?;
-    let path_list: Vec<PathBuf> = get_all_bibtex_files(path_handle.value(&mut cx))?;
+    let path_list: Vec<PathBuf> = volume_search::get_all_bibtex_files(path_handle.value(&mut cx))?;
 
     // pass into JS Array
     let js_return_array = JsArray::new(&mut cx, path_list.len() as u32);
@@ -26,28 +26,14 @@ fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
     Ok(js_return_array)
 }
 
-fn get_all_bibtex_files(file_path: String) -> NeonResult<Vec<PathBuf>> {
-    
-    let bibtex_glob_string = "**/*.bib";
-    let glob_path: String = format!("{}/{}", file_path, bibtex_glob_string);
-
-    let mut relative_path_list: Vec<PathBuf> = Vec::new();
-
-    for entry in glob(&glob_path).expect("Bad Glob Pattern") {
-        match entry {
-            Ok(entry_value) => 
-                relative_path_list.push(entry_value),
-            Err(_e) => ()
-        };
-    }    
-
-    Ok(relative_path_list)
-}
-
+// takes an array of bibtex file paths and merges them into one bibtex file
+// TODO:
 fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
+
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
     let file_contents = utility::read_files_into_strings(path_list)?;
+
     let mut entries: Vec<BibEntry> = Vec::new();
     for file_content in file_contents {
         entries = parser::bibtex_parser::parse_bibtex_string(file_content)?;
@@ -59,10 +45,26 @@ fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
     Ok(return_value)
 }
 
+fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsArray> {
+    let path_arg = cx.argument::<JsString>(0)?;
+    let path = path_arg.value(&mut cx);
+
+    let file_content = utility::read_file(path)?;
+    let entries = parser::bibtex_parser::parse_bibtex_string(file_content)?;
+
+    let return_arr = JsArray::new(&mut cx, entries.len() as u32);
+    for (i, entry) in entries.iter().enumerate() {
+        let obj = entry.to_object(&mut cx)?;
+        return_arr.set(&mut cx, i as u32, obj)?;
+    }
+
+    Ok(return_arr)
+}
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("searchVolume", search_volume)?;
     cx.export_function("mergeBibTexFiles", merge_bibtex_files)?;
+    cx.export_function("parseBibTexFile", parse_bibtex_file)?;
     Ok(())
 }

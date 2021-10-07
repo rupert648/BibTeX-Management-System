@@ -26,14 +26,27 @@ fn is_comment(line: &str) -> bool {
 
 pub fn is_properly_formatted(entry: &str) -> bool {
     // TODO: Add more sanitisation checks
+    // TODO: Merge below functions so only one pass is done - less clean but faster?
     is_equal_curly_brackets(entry) &&
     is_equal_quotations(entry)
 }
 
 fn is_equal_curly_brackets(entry: &str) -> bool {
-    let numb_left = entry.matches("{").count();
-    let numb_right = entry.matches("}").count();
-    numb_left != 0 && (numb_left == numb_right)
+    let mut numb_bracks = 0;
+    let mut escaped_char = false;
+    for c in entry.chars() {
+        if c == '\\' {
+            escaped_char = true;
+        } else if c == '{'  && !escaped_char{
+            numb_bracks += 1;   
+        } else if c == '}'  && !escaped_char{
+            numb_bracks -= 1;
+        } else {
+            escaped_char = false;
+        }
+    }
+
+    numb_bracks == 0
 }
 
 fn is_equal_quotations(entry: &str) -> bool {

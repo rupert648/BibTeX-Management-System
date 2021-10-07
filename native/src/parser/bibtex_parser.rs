@@ -63,13 +63,11 @@ fn consume_entry_name(mut entry_iterator: Chars, entry_type: String) -> NeonResu
         name.push(current);
         current  = entry_iterator.next().unwrap();
     }
-    println!("entry_type: {}", entry_type);
-    println!("name: {}", name);
 
     consume_fields(entry_iterator, entry_type, name)
 }
 
-// Disgusting function :)) TODO: Break this function down (might be impossible due to iterator)
+// Disgusting function :)) TODO: Break this function down (might be very difficult due to iterator)
 fn consume_fields(entry_iterator: Chars, entry_type: String, name: String) -> NeonResult<BibEntry> {
     // let mut fields_string = entry_iterator.as_str().trim();
     // // remove last char
