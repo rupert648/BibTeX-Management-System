@@ -1,6 +1,8 @@
 use neon::prelude::*;
 use std::fs;
+use std::path::PathBuf;
 
+use crate::datatypes::bibentry::BibEntry;
 
 pub fn js_string_array_to_vec(js_array: Handle<JsArray>, cx: &mut FunctionContext) -> NeonResult<Vec<String>> {
     // convert to string vec
@@ -24,6 +26,34 @@ pub fn read_files_into_strings(path_list: Vec<String>) -> NeonResult<Vec<String>
     }
 
     Ok(file_contents)
+}
+
+pub fn is_files_all_valid(path_list: &Vec<String>) -> bool {
+    for path in path_list {
+        let pathbuf = PathBuf::from(path);
+        if pathbuf.extension().unwrap() != "bib" {
+            return false
+        }
+    }
+
+    true
+}
+
+pub fn create_entries_return_object<'a>(entries: Vec<BibEntry>, cx: &mut FunctionContext<'a>) -> JsResult<'a, JsObject> {
+    let obj = cx.empty_object();
+
+    let status = cx.string("OK");
+    obj.set(cx, "status", status)?;
+
+    let js_arr = JsArray::new(cx, entries.len() as u32);
+    for (i, entry) in entries.iter().enumerate() {
+        let obj = entry.to_object(cx)?;
+        js_arr.set(cx, i as u32, obj)?;
+    }
+
+    obj.set(cx, "entries", js_arr)?;
+
+    Ok(obj)
 }
 
 pub fn read_file(path: String) -> NeonResult<String> {

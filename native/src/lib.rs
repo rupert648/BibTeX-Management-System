@@ -10,6 +10,7 @@ mod datatypes;
 mod utility;
 mod parser;
 mod volume_search;
+mod error;
 
 /// Searches a given path and its sub directories for .bib files.
 ///
@@ -38,22 +39,27 @@ pub fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
 /// 
 /// Will parse these files, search all entries for duplicates or near duplicates, and then interact
 /// with the user to decide how to handle all of these. **Note this can only be called from the JS Runtime**
-pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsString> {
-    // TODO: Check all paths are .bib files
+pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
-
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
+
+    if path_list.len() <= 1 {
+        // TODO: Give the option still to merge with this
+        return error::create_error_object(String::from("Only 1 File Submitted"), &mut cx)
+    }
+    if !utility::is_files_all_valid(&path_list) {
+        return error::create_error_object(String::from("Invalid File Type Found"), &mut cx)
+    }
+
     let file_contents = utility::read_files_into_strings(path_list)?;
 
     let mut entries: Vec<BibEntry> = Vec::new();
     for file_content in file_contents {
-        entries = parser::bibtex_parser::parse_bibtex_string(file_content)?;
+        let mut temp = parser::bibtex_parser::parse_bibtex_string(file_content)?;
+        entries.append(&mut temp);
     }
 
-    println!("{:?}", entries);
-
-    let return_value: Handle<JsString> = cx.string("Temp return value");
-    Ok(return_value)
+    utility::create_entries_return_object(entries, &mut cx)
 }
 
 /// Given a .bib file path will parse it, and return the entries as a JS array of objects.
