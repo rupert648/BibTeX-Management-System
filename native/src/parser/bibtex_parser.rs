@@ -109,8 +109,8 @@ fn consume_fields(entry_iterator: Chars, entry_type: String, name: String) -> Ne
         } else if c == ',' && bracket_count == 0  && quote_count % 2 == 0 && !is_field_name {
             // field complete
             fields.push(Field {
-                            field_name: field_name.clone(),
-                            field_value: field_value.clone()
+                            field_name: field_name.clone().trim().to_string(),
+                            field_value: field_value.clone().trim().to_string()
                         });
             // reset values
             field_name = String::new();
