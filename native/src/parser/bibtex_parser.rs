@@ -44,7 +44,6 @@ fn parse_entry(entry_string: String) -> NeonResult<BibEntry> {
     Ok(entry)
 }
 
-// TODO: Splitting maybe not best way to do this, maybe iterate through string and consume characters as tokens
 fn consume_entry_type(mut entry_iterator: Chars) -> NeonResult<BibEntry> {
     let mut entry_type = String::new();
     let mut current: char =  entry_iterator.next().unwrap();

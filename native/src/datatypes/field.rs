@@ -1,6 +1,6 @@
 use neon::prelude::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Field {
     pub field_name: String,
     pub field_value: String
@@ -17,5 +17,10 @@ impl Field {
         obj.set(cx, "fieldValue", field_value)?;
 
         Ok(obj)
+    }
+
+    pub fn is_exact_same(&self, compared: &Field) -> bool {
+        self.field_name == compared.field_name &&
+        self.field_value == compared.field_value
     }
 }

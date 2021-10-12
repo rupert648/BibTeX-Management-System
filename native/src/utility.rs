@@ -39,6 +39,11 @@ pub fn is_files_all_valid(path_list: &Vec<String>) -> bool {
     true
 }
 
+pub fn is_file_valid(path: &str) -> bool {
+    let pathbuf = PathBuf::from(path);
+    pathbuf.extension().unwrap() == "bib"
+}
+
 pub fn create_entries_return_object<'a>(entries: Vec<BibEntry>, cx: &mut FunctionContext<'a>) -> JsResult<'a, JsObject> {
     let obj = cx.empty_object();
 

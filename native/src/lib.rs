@@ -11,6 +11,7 @@ mod utility;
 mod parser;
 mod volume_search;
 mod error;
+mod duplicate;
 
 /// Searches a given path and its sub directories for .bib files.
 ///
@@ -43,10 +44,10 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
 
-    if path_list.len() <= 1 {
-        // TODO: Give the option still to merge with this
-        return error::create_error_object(String::from("Only 1 File Submitted"), &mut cx)
-    }
+    // if path_list.len() <= 1 {
+    //     // TODO: create another function for performing same duplication tests on single string
+    //     return error::create_error_object(String::from("Only 1 File Submitted"), &mut cx)
+    // }
     if !utility::is_files_all_valid(&path_list) {
         return error::create_error_object(String::from("Invalid File Type Found"), &mut cx)
     }
@@ -58,6 +59,8 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
         let mut temp = parser::bibtex_parser::parse_bibtex_string(file_content)?;
         entries.append(&mut temp);
     }
+
+    entries = duplicate::remove_direct_duplicates(entries)?;
 
     utility::create_entries_return_object(entries, &mut cx)
 }
@@ -73,21 +76,19 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
 ///    pub fields: Vec<Field>,
 ///}
 /// ```
-pub fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsArray> {
+pub fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     // TODO: check all paths are .bib files
     let path_arg = cx.argument::<JsString>(0)?;
     let path = path_arg.value(&mut cx);
 
+    if !utility::is_file_valid(&path) {
+        return error::create_error_object(String::from("File Not a bibtex file"), &mut cx);
+    }
+
     let file_content = utility::read_file(path)?;
     let entries = parser::bibtex_parser::parse_bibtex_string(file_content)?;
 
-    let return_arr = JsArray::new(&mut cx, entries.len() as u32);
-    for (i, entry) in entries.iter().enumerate() {
-        let obj = entry.to_object(&mut cx)?;
-        return_arr.set(&mut cx, i as u32, obj)?;
-    }
-
-    Ok(return_arr)
+    utility::create_entries_return_object(entries, &mut cx)
 }
 
 #[neon::main]

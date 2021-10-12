@@ -1,7 +1,7 @@
 pub use crate::datatypes::field::Field;
 use neon::prelude::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BibEntry {
     pub entry_type: String,
     pub name: String,
@@ -16,6 +16,29 @@ impl Default for BibEntry {
             name: "".to_string(),
             fields: empty_vec,
         }
+    }
+}
+
+impl PartialEq for BibEntry {
+    fn eq(&self, other: &Self) -> bool {
+
+        if self.fields.len() != other.fields.len() {
+            return false;
+        }
+
+        let mut is_fields_same = true;
+        for i in 0..self.fields.len() {
+            let self_field = self.fields.get(i).unwrap();
+            let other_field = other.fields.get(i).unwrap();
+            if !self_field.is_exact_same(other_field) {
+                is_fields_same = false;
+                break;
+            }
+        }
+
+        is_fields_same &&
+        self.entry_type == other.entry_type &&
+        self.name == other.name
     }
 }
 
@@ -39,4 +62,5 @@ impl BibEntry {
 
         Ok(obj)
     }
+
 }
