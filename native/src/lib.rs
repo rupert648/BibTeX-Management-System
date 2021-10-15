@@ -2,16 +2,19 @@
 
 //! This crate contains "JS functions" for neon, allowing the user to read, merge and collate BibTex Files
 
+// imports
 use neon::prelude::*;
 use std::path::PathBuf;
 use crate::datatypes::bibentry::BibEntry;
 
+// modules
 mod datatypes;
 mod utility;
 mod parser;
 mod volume_search;
 mod error;
 mod duplicate;
+mod file_writer;
 
 /// Searches a given path and its sub directories for .bib files.
 ///
@@ -42,8 +45,10 @@ pub fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
 /// with the user to decide how to handle all of these. **Note this can only be called from the JS Runtime**
 pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
+    let js_output_file_path = cx.argument::<JsString>(1)?;
+    
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
-
+    let output_file_path = js_output_file_path.value(&mut cx);
     // if path_list.len() <= 1 {
     //     // TODO: create another function for performing same duplication tests on single string
     //     return error::create_error_object(String::from("Only 1 File Submitted"), &mut cx)
@@ -61,8 +66,11 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     }
 
     entries = duplicate::remove_direct_duplicates(entries)?;
+    // TODO: check if is empty to prevent writing empty file - these checks can also be done frontend
 
-    utility::create_entries_return_object(entries, &mut cx)
+    file_writer::write_entries_to_file(entries, output_file_path)?;
+
+    utility::create_success_return_object(&mut cx)
 }
 
 /// Given a .bib file path will parse it, and return the entries as a JS array of objects.

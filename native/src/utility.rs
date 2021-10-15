@@ -61,12 +61,20 @@ pub fn create_entries_return_object<'a>(entries: Vec<BibEntry>, cx: &mut Functio
     Ok(obj)
 }
 
+pub fn create_success_return_object<'a>(cx: &mut FunctionContext<'a>) -> JsResult<'a, JsObject> {
+    let obj = cx.empty_object();
+    
+    let status = cx.string("OK");
+    obj.set(cx, "status", status)?;
+
+    let message = cx.string("File written to successfully");
+    obj.set(cx, "message", message)?;
+
+    Ok(obj)
+}
+
 pub fn read_file(path: String) -> NeonResult<String> {
     let file_content = fs::read_to_string(path).expect("Something went wrong reading the file");
 
     Ok(file_content)
-}
-
-pub fn print_error_message(error_message: String) {
-    println!("----------\nerror: \n{}\n---------", error_message)
 }

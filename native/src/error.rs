@@ -10,3 +10,7 @@ pub fn create_error_object<'a>(error_message: String, cx: &mut FunctionContext<'
 
     Ok(err)
 }
+
+pub fn print_error_message(error_message: String) {
+    println!("----------\nerror: \n{}\n---------", error_message)
+}

@@ -63,4 +63,25 @@ impl BibEntry {
         Ok(obj)
     }
 
+    pub fn to_string(&self) -> String {
+        let mut bib = String::new();
+
+        bib.push('@');
+        bib.push_str(&self.entry_type);
+        bib.push('{');
+            bib.push_str(&self.name);
+            bib.push(',');
+            for field in &self.fields {
+                bib.push_str(&field.field_name);
+                bib.push('=');
+                bib.push('{');
+                bib.push_str(&field.field_value);
+                bib.push('}');
+                bib.push(',');
+            }
+        bib.push('}');
+
+        bib
+    }
+
 }

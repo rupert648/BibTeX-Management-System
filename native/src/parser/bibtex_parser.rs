@@ -1,6 +1,6 @@
 use crate::datatypes::bibentry::BibEntry;
 use crate::datatypes::field::Field;
-use crate::utility::{print_error_message};
+use crate::error::{print_error_message};
 use crate::parser::bibtex_sanitiser;
 use neon::prelude::*;
 use std::str::Chars;
@@ -117,6 +117,7 @@ fn consume_fields(entry_iterator: Chars, entry_type: String, name: String) -> Ne
             field_value = String::new();
             bracket_count=0;
             quote_count=0;
+
 
             // swap flags
             is_field_name = true;
