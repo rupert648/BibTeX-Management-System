@@ -15,6 +15,7 @@ mod volume_search;
 mod error;
 mod duplicate;
 mod file_writer;
+mod string_matchers;
 
 /// Searches a given path and its sub directories for .bib files.
 ///
