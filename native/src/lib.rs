@@ -6,6 +6,7 @@
 use neon::prelude::*;
 use std::path::PathBuf;
 use crate::datatypes::bibentry::BibEntry;
+use crate::string_matchers::{damerau_levenshtein, hamming, levenshtein, ngram};
 
 // modules
 mod datatypes;
@@ -39,6 +40,7 @@ pub fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
 
     Ok(js_return_array)
 }
+
 
 /// Given an array of file paths, merges these into a singular .bib file - removing any duplicates
 /// 
@@ -100,10 +102,83 @@ pub fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsObject> {
     utility::create_entries_return_object(entries, &mut cx)
 }
 
+/// Given two strings, will compute the hamming distance between them
+/// 
+/// Given two strings, using the hamming distance algorithm to work out the distance between them
+/// Returns the distance as a javascript number.
+pub fn hamming(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+
+    println!("String 1: {}\nString 2: {}", &string1, &string2);
+    let result = hamming::compute(&string1, &string2);
+
+    Ok(cx.number(result))
+}
+
+/// Given two strings, computes the levenshtein difference between them
+/// 
+/// Given two strings, uses the levenshtein algorithm to work out the distance between them
+/// This algorithm checks for the minimum number of insertions, deletions or subtitutions required to change one string into the other
+pub fn levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+
+    println!("String 1: {}\nString 2: {}", &string1, &string2);
+    let result = levenshtein::compute(&string1, &string2);
+
+    Ok(cx.number(result))
+}
+
+/// Given two strings, computes the damerau levenshtein difference between them
+/// 
+/// Given two strings, uses the damerau levenshtein algorithm to work out the distance between them
+/// Checks same operations as levenshtein (isnertions, deletions or substitutions), but also includes transposition of two adjacent characters
+/// Note this is the simpler "Optimal string alignment distance" algorithm, which is slightly simpler than the "true" demerau levenshtein distance
+/// The difference between the two algorithms can be seen here https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
+pub fn damerau_levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+
+    println!("String 1: {}\nString 2: {}", &string1, &string2);
+    let result = damerau_levenshtein::compute(&string1, &string2);
+
+    Ok(cx.number(result))
+}
+
+pub fn ngram(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    let ngram_handle = cx.argument::<JsNumber>(2)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+    let n = ngram_handle.value(&mut cx) as i32;
+
+    println!("String 1: {}\nString 2: {}", &string1, &string2);
+    let result = ngram::compute(&string1, &string2, n);
+
+    Ok(cx.number(result))
+}
+
+
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("searchVolume", search_volume)?;
     cx.export_function("mergeBibTexFiles", merge_bibtex_files)?;
     cx.export_function("parseBibTexFile", parse_bibtex_file)?;
+    cx.export_function("hamming", hamming)?;
+    cx.export_function("levenshtein", levenshtein)?;
+    cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
+    cx.export_function("ngram", ngram)?;
     Ok(())
 }

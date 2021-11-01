@@ -6,16 +6,15 @@ pub fn compute(str1: &str, str2: &str) -> i32 {
     let str1_len = str1.len();
     let str2_len = str2.len();
 
-    // 256 is the size of the alphabet - we are assuming extended ASCII for now
-    // TODO: checks on size of alphabet used
-
+    // if empty string changes required equivalent to length of other string
     if str1_len == 0 {
         return str2_len as i32;
     }
     if str2_len == 0 {
         return str1_len as i32;
     }
-    let mut dist = vec![vec![0; str1_len + 1]; str2_len + 1];
+    
+    let mut dist = vec![vec![0; str2_len + 1]; str1_len + 1];
 
     let max_dist = str1_len + str2_len;
     dist[0][0] = max_dist as i32;
@@ -40,7 +39,7 @@ pub fn compute(str1: &str, str2: &str) -> i32 {
                 dist[i - 1][j - 1] + cost
             );
 
-            // this bit allows swapping
+            // this bit allows character swapping
             if  i > 1 &&
                 j > 1 &&
                 str1_char == str2.chars().nth(j-2).unwrap() && 
