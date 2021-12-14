@@ -3,3 +3,10 @@ Under development. Being built using [Neon Bindings](https://neon-bindings.com):
 
 ### The Project
 To develop a lightweight, fast desktop application for collating and merging `.bib` files on a volume. The application (will) searches a directory and subdirectories for any `.bib` files, then merges them, using techniques to find duplicate or near-duplicate citations. It then interacts with the user to choose the best method to proceed. 
+
+### String Matcihng Algorithms Implemented
+ - [x] hamming
+ - [x] levenschtein
+ - [x] damerau-levenschtein
+ - [ ] ngram
+ - [ ] Richard Connor
