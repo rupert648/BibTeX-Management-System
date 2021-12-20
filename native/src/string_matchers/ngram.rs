@@ -3,6 +3,7 @@ use std::convert::TryInto;
 use crate::string_matchers::hamming;
 
 pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
+    let special = '\n';
     let source_len = source.len();
     let target_len = target.len();
 
@@ -25,17 +26,18 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
 
     let n = ngram_size as usize;
     let sa_length = source_len + n - 1;
-    let mut sa = vec!['\n'; sa_length];
+    let mut sa = vec![special; sa_length];
     let mut p: Vec<f64>;
     let mut d: Vec<f64>;
     let mut _swapper: Vec<f64> = Vec::new();
 
     // construct sa
     for i in 0..sa.len() {
-        if i < (ngram_size-1).try_into().unwrap() {
-            sa[i] = '\n';
+        if i < n - 1 {
+            sa[i] = special;    // prefix
         } else {
-            let source_char = source.chars().nth(i - n + 1).unwrap();
+            let value = (i as i32) - (n as i32) + 1;
+            let source_char = source.chars().nth(value as usize).unwrap();
             sa[i] = source_char;
         }
     }
@@ -44,7 +46,7 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
     d = vec![0.0; source_len+1];
 
     // jth ngram of t
-    let mut t_j = vec!['\n'; n];
+    let mut t_j = vec![special; n];
 
     for i in 0..source_len+1 {
         p[i] = i as f64;
@@ -53,7 +55,7 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
     for j in 1..target_len+1 {
         if j < n {
             for ti in 0..(n-j) {
-                t_j[ti] = '\n';
+                t_j[ti] = special;
             }
             for ti in (n-j)..n {
                 let target_char = target.chars().nth(ti-(n-j)).unwrap();
@@ -72,7 +74,7 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
             for ni in 0..n {
                 if sa[i-1+ni] != t_j[ni] {
                     cost+=1;
-                } else if sa[i-1+ni] == '\n' {
+                } else if sa[i-1+ni] == special {
                     // discount matches on prefix
                     tn-=1;
                 }
