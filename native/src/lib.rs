@@ -6,7 +6,13 @@
 use neon::prelude::*;
 use std::path::PathBuf;
 use crate::datatypes::bibentry::BibEntry;
-use crate::string_matchers::{damerau_levenshtein, hamming, levenshtein, ngram};
+use crate::string_matchers::{
+    damerau_levenshtein,
+    hamming,
+    levenshtein,
+    ngram,
+    jenson_shanning_vector
+};
 
 // modules
 mod datatypes;
@@ -170,6 +176,21 @@ pub fn ngram(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+pub fn jenson_shanning_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    let ngram_handle = cx.argument::<JsNumber>(2)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+    let n = ngram_handle.value(&mut cx) as i32;
+
+    println!("String 1: {}\nString 2: {}", &string1, &string2);
+    let result = jenson_shanning_vector::compute(&string1, &string2);
+
+    Ok(cx.number(result))
+}
+
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
@@ -180,5 +201,6 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("levenshtein", levenshtein)?;
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
     cx.export_function("ngram", ngram)?;
+    cx.export_function("jensonShanningVector", jenson_shanning_vector)?;
     Ok(())
 }
