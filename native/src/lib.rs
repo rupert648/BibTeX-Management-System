@@ -161,6 +161,10 @@ pub fn damerau_levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+/// Given two strings, computes an ngram-based distance value between them
+/// 
+/// Given two strings, uses an ngram based distance algorithm to calculate a value between them.
+/// Inspired by "Fast String Matching using an n-gram Algorithm" by jong yong kim and john shawe-taylor
 pub fn ngram(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1_handle = cx.argument::<JsString>(0)?;
     let string2_handle = cx.argument::<JsString>(1)?;
@@ -176,14 +180,17 @@ pub fn ngram(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+/// Given two strings, computes a vector space distance algorithm which returns a floating point distance value between them.
+/// 
+/// Given two strings, uses a vector space distance algorithm to calculate a value between them.
+/// Adapted from Richard Connor et al's equivalent algorithm originally implemented in java,
+/// described in the paper "Modelling String Structure in Vector Spaces" by Richard Connor, Alan Dearle, and Lucia Vadicamo.
 pub fn jenson_shanning_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1_handle = cx.argument::<JsString>(0)?;
     let string2_handle = cx.argument::<JsString>(1)?;
-    let ngram_handle = cx.argument::<JsNumber>(2)?;
     
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
-    let n = ngram_handle.value(&mut cx) as i32;
 
     println!("String 1: {}\nString 2: {}", &string1, &string2);
     let result = jenson_shanning_vector::compute(&string1, &string2);
