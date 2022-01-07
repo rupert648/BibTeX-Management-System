@@ -1,6 +1,6 @@
 #![warn(missing_docs)]
 
-//! This crate contains "JS functions" for neon, allowing the user to read, merge and collate BibTex Files
+//! This crate contains "JS functions" for neon, allowing the user to read, merge and collate BibTex Files as well as perform several varying string comparison algorithms
 
 // imports
 use neon::prelude::*;
@@ -31,7 +31,7 @@ mod string_matchers;
 /// be thrown to the javascript runtime. **Note this can only be called from the JS Runtime**
 pub fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
     let path_handle = cx.argument::<JsString>(0)?;
-    let path_list: Vec<PathBuf> = volume_search::get_all_bibtex_files(path_handle.value(&mut cx))?;
+    let path_list = volume_search::get_all_bibtex_files(path_handle.value(&mut cx))?;
 
     // pass into JS Array
     let js_return_array = JsArray::new(&mut cx, path_list.len() as u32);
