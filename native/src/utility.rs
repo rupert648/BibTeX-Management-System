@@ -39,6 +39,17 @@ pub fn is_files_all_valid(path_list: &Vec<String>) -> bool {
     true
 }
 
+pub fn create_bib_string(entries: Vec<BibEntry>) -> NeonResult<String> {
+    let mut bib = String::new();
+
+    for entry in entries {
+        bib.push_str(&entry.to_string());
+        bib.push('\n');
+    }
+
+    Ok(bib)
+}
+
 pub fn is_file_valid(path: &str) -> bool {
     let pathbuf = PathBuf::from(path);
     pathbuf.extension().unwrap() == "bib"

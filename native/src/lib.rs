@@ -4,7 +4,6 @@
 
 // imports
 use neon::prelude::*;
-use std::path::PathBuf;
 use crate::datatypes::bibentry::BibEntry;
 use crate::string_matchers::{
     damerau_levenshtein,
@@ -55,9 +54,11 @@ pub fn search_volume(mut cx: FunctionContext) -> JsResult<JsArray> {
 pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     let path_list_js_array = cx.argument::<JsArray>(0)?;
     let js_output_file_path = cx.argument::<JsString>(1)?;
+    let js_threshold = cx.argument::<JsNumber>(2)?;
     
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
     let output_file_path = js_output_file_path.value(&mut cx);
+    let threshold = js_threshold.value(&mut cx) as f64;
     // if path_list.len() <= 1 {
     //     // TODO: create another function for performing same duplication tests on single string
     //     return error::create_error_object(String::from("Only 1 File Submitted"), &mut cx)
@@ -75,11 +76,35 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     }
 
     entries = duplicate::remove_direct_duplicates(entries)?;
+    entries = duplicate::remove_highly_similar_duplicates(entries, threshold)?;
     // TODO: check if is empty to prevent writing empty file - these checks can also be done frontend
 
     file_writer::write_entries_to_file(entries, output_file_path)?;
 
     utility::create_success_return_object(&mut cx)
+}
+
+/// Given a bibtex string it will parse it, and remove any duplicates or near duplicates
+/// 
+/// Given a bibtex string it will parse it and reove any duplicate entries or near entries
+/// note it does not santise the input so it expects a valid bibtex string, otherwise it will error or produce
+/// unexpected behaviour
+pub fn remove_duplicates_from_bibtex_string(mut cx: FunctionContext) -> JsResult<JsString> {
+    let js_bibtex_string = cx.argument::<JsString>(0)?;
+    let js_threshold = cx.argument::<JsNumber>(1)?;
+
+    let bibtex_string = js_bibtex_string.value(&mut cx);
+    let threshold = js_threshold.value(&mut cx) as f64;
+
+    let mut entries: Vec<BibEntry> = parser::bibtex_parser::parse_bibtex_string(bibtex_string)?;
+
+    // remove dups
+    entries = duplicate::remove_direct_duplicates(entries)?;
+    entries = duplicate::remove_highly_similar_duplicates(entries, threshold)?;
+
+    // return result
+    let entries_string = utility::create_bib_string(entries)?;
+    Ok(cx.string(entries_string))
 }
 
 /// Given a .bib file path will parse it, and return the entries as a JS array of objects.

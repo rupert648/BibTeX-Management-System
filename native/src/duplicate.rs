@@ -1,13 +1,6 @@
-use std::ops::Rem;
-
 use neon::prelude::*;
 use crate::datatypes::bibentry::BibEntry;
 use crate::string_matchers::jenson_shanning_vector;
-
-struct BibEntryIsRemoved {
-    entry: BibEntry,
-    isRemoved: bool
-}
 
 pub fn remove_direct_duplicates(entries: Vec<BibEntry>) -> NeonResult<Vec<BibEntry>> {
     let mut entries_cleaned: Vec<BibEntry> = Vec::new();
@@ -22,30 +15,45 @@ pub fn remove_direct_duplicates(entries: Vec<BibEntry>) -> NeonResult<Vec<BibEnt
     Ok(entries_cleaned)
 }
 
+
+
 pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) -> NeonResult<Vec<BibEntry>> {
     let mut entries_cleaned: Vec<BibEntry> = Vec::new();
 
-    let mut entry_iter_array: Vec<BibEntryIsRemoved> = entries
-        .into_iter()
-        .map(|entry| BibEntryIsRemoved {entry: entry, isRemoved: false})
-        .collect();
+    let mut is_removed_arr: Vec<bool> = Vec::new();
+    // instantiate array
+    for _i in 0..entries.len() {
+        is_removed_arr.push(false);
+    }
 
-    for i in 0..entry_iter_array.len() {
-        for j in (i+1)..entry_iter_array.len() {
+    for i in 0..entries.len() {
 
-            let entry1 = entry_iter_array.get(i).unwrap().entry;
-            let entry2 = entry_iter_array.get(j).unwrap().entry;
+        if is_removed_arr[i] { continue; }
+
+        for j in (i+1)..entries.len() {
+
+            if is_removed_arr[j] { continue; }
+
+            let entry1 = entries.get(i).unwrap();
+            let entry2 = entries.get(j).unwrap();
 
             let entry1_str = entry1.to_string();
             let entry2_str = entry2.to_string();
 
             let score = jenson_shanning_vector::compute(&entry1_str, &entry2_str); 
             
-            if score > threshold {
-                // set isRemoved to true
+            // then too similar
+            if score < threshold {
+                // set isRemoved to true (for latter, we keep the first in the array)
+                is_removed_arr[j] = true;
             }
         }
     }
+
+    // put new values in arr
+    for (index, entry) in entries.iter().enumerate() {
+        if !is_removed_arr[index] { entries_cleaned.push(entry.clone()); }
+    }
     
-    Ok(Vec::new())
+    Ok(entries_cleaned)
 }

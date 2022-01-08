@@ -6,3 +6,29 @@ npm-debug.log*
 
 **/test_dir
 ../test_dir
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage
+.eslintcache
+
+# OSX
+.DS_Store
+
+frontend/release/app/dist
+frontend/release/build
+frontend/.erb/dll
+
+.idea
+npm-debug.log.*
+*.css.d.ts
+*.sass.d.ts
+*.scss.d.ts
