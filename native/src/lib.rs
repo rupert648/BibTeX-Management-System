@@ -229,6 +229,7 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("searchVolume", search_volume)?;
     cx.export_function("mergeBibTexFiles", merge_bibtex_files)?;
     cx.export_function("parseBibTexFile", parse_bibtex_file)?;
+    cx.export_function("removeDuplicatesFromBibtexString", remove_duplicates_from_bibtex_string)?;
     cx.export_function("hamming", hamming)?;
     cx.export_function("levenshtein", levenshtein)?;
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;

@@ -47,9 +47,15 @@ fn parse_entry(entry_string: String) -> NeonResult<BibEntry> {
 fn consume_entry_type(mut entry_iterator: Chars) -> NeonResult<BibEntry> {
     let mut entry_type = String::new();
     let mut current: char =  entry_iterator.next().unwrap();
+
     while current != '{' {
         entry_type.push(current);    
         current =  entry_iterator.next().unwrap();
+    }
+
+    if entry_type.to_lowercase() == "preamble" {
+        // return out of parsing this entry
+        return Err(neon::result::Throw)
     }
 
     consume_entry_name(entry_iterator, entry_type)

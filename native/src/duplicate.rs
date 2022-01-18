@@ -40,6 +40,7 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
             let entry1_str = entry1.to_string();
             let entry2_str = entry2.to_string();
 
+            // compute difference score
             let score = jenson_shanning_vector::compute(&entry1_str, &entry2_str); 
             
             // then too similar
