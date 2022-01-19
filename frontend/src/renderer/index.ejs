@@ -13,6 +13,13 @@
       console.log(arg);
     });
 
+    window.electron.ipcRenderer.once('open-dialog', (arg) => {
+      console.log(arg)
+    })
+
     window.electron.ipcRenderer.myPing();
+
+    window.electron.ipcRenderer.openDialog();
+
   </script>
 </html>
