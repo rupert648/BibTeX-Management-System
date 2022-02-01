@@ -223,6 +223,15 @@ pub fn jenson_shanning_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+pub fn get_file_size(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+
+    let string1 = string1_handle.value(&mut cx);
+
+    let result = utility::get_file_size(string1)?;
+
+    Ok(cx.number(result))
+}
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
@@ -235,5 +244,6 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
     cx.export_function("ngram", ngram)?;
     cx.export_function("jensonShanningVector", jenson_shanning_vector)?;
+    cx.export_function("getFileSize", get_file_size)?;
     Ok(())
 }

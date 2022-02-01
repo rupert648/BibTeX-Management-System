@@ -89,3 +89,8 @@ pub fn read_file(path: String) -> NeonResult<String> {
 
     Ok(file_content)
 }
+
+pub fn get_file_size(path: String) -> NeonResult<f64> {
+    let result = fs::metadata(path).unwrap().len();
+    Ok(result as f64)
+}
