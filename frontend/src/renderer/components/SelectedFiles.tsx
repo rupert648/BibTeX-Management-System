@@ -13,11 +13,13 @@ import { styled } from '@mui/material/styles';
 
 import { FileRow } from './FileCard';
 
-type SelectedFilesProps = {
-  foundFiles: Array<string>
+interface SelectedFilesProps {
+  foundFiles: Array<string>;
+  setFileOpen: Function;
+  setSelectedFile: Function;
 }
 
-export const SelectedFiles = ({foundFiles}: SelectedFilesProps) => {
+export const SelectedFiles = ({foundFiles, setFileOpen, setSelectedFile}: SelectedFilesProps) => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -31,7 +33,12 @@ export const SelectedFiles = ({foundFiles}: SelectedFilesProps) => {
 
     const createFileRow = (file: string, index: Number) => {
       return (
-        <FileRow file={file} index={index} StyledTableCell={StyledTableCell}/>
+        <FileRow 
+          file={file}
+          StyledTableCell={StyledTableCell}
+          setFileOpen={setFileOpen}
+          setSelectedFile={setSelectedFile}
+        />
       )
     }
 

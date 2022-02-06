@@ -1,5 +1,6 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import {HomePage} from './pages/HomePage';
+import { FilePage } from './pages/FilePage';
 
 import './App.css';
 
