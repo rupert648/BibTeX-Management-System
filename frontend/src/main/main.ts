@@ -11,13 +11,12 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import backend from 'backend';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-
-import { dialog } from 'electron';
 
 export default class AppUpdater {
   constructor() {
@@ -35,10 +34,26 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.on('open-dialog', async (event, arg) => {
-  let result = await dialog.showOpenDialog({ properties: ['openDirectory']})
+// eslint-disable-next-line no-unused-vars
+ipcMain.on('open-dialog', async (event, _arg) => {
+  const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
   event.reply('open-dialog', result);
-})
+});
+
+ipcMain.on('search-volume', async (event, arg) => {
+  const result = backend.searchVolume(arg);
+  event.reply('search-volume', result);
+});
+
+ipcMain.on('get-file-length', async (event, arg) => {
+  const result = backend.getFileSize(arg);
+  event.reply('get-file-length', result);
+});
+
+ipcMain.on('parse-bibtex-file', async (event, arg) => {
+  const result = backend.parseBibTexFile(arg);
+  event.reply('parse-bibtex-file', result);
+});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -74,9 +89,8 @@ const createWindow = async () => {
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
 
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
+  const getAssetPath = (...paths: string[]): string =>
+    path.join(RESOURCES_PATH, ...paths);
 
   mainWindow = new BrowserWindow({
     show: false,

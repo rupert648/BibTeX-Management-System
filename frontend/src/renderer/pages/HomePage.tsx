@@ -1,36 +1,49 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable import/extensions */
+import React, { useState } from 'react';
 import { Stack, Divider } from '@mui/material';
 
-import { FilePage } from './FilePage';
-import { MenuBar } from '../components/MenuBar';
-import { SelectedFiles } from '../components/SelectedFiles'
-import { HomeSubtitle } from 'renderer/components/HomeSubtitle';
-import { ActionsStack } from 'renderer/components/ActionsStack';
+import HomeSubtitle from '../components/HomeSubtitle';
+import ActionsStack from '../components/ActionsStack';
+import FilePage from './FilePage';
+import FilePageMenuBar from '../components/FilePageMenuBar';
+import HomePageMenuBar from '../components/HomePageMenuBar';
+import SelectedFiles from '../components/SelectedFiles';
 
-export const HomePage = () => {
-    const [foundFiles, setFoundFiles] = useState([]);
-    const [fileOpen, setFileOpen] = useState(false);
-    const [selectedFile, setSelectedFile] = useState("");
+function HomePage() {
+  const [foundFiles, setFoundFiles] = useState([]);
+  const [fileOpen, setFileOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState('');
+  const [checkedFiles, setCheckedFiles] = useState([]);
 
-    // return section
-    if (fileOpen) {
-        return (
-            <FilePage file={selectedFile} setFileOpen={setFileOpen}/>
-        )
-    } 
-
+  if (fileOpen) {
     return (
-        <Stack >
-            <MenuBar setFoundFiles={setFoundFiles} />
-            <HomeSubtitle text="Found Files" numberFilesFound={foundFiles.length}/>
-            <SelectedFiles 
-                foundFiles={foundFiles}
-                setFileOpen={setFileOpen}
-                setSelectedFile={setSelectedFile}
-            />
-            <Divider />
-            <ActionsStack />
-        </Stack>
-    )
-    
+      <Stack>
+        <FilePageMenuBar setFileOpen={setFileOpen} />
+        <HomeSubtitle text={selectedFile} homePage={false} />
+        <FilePage file={selectedFile} setFileOpen={setFileOpen} />
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack>
+      <HomePageMenuBar setFoundFiles={setFoundFiles} />
+      <HomeSubtitle
+        text="Found Files"
+        numberFilesFound={foundFiles.length}
+        homePage
+      />
+      <SelectedFiles
+        foundFiles={foundFiles}
+        setFileOpen={setFileOpen}
+        setSelectedFile={setSelectedFile}
+        setCheckedFiles={setCheckedFiles}
+        checkedFiles={checkedFiles}
+      />
+      <Divider />
+      <ActionsStack />
+    </Stack>
+  );
 }
+
+export default HomePage;

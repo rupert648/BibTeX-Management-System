@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-window.ipcRenderer = ipcRenderer
+window.ipcRenderer = ipcRenderer;
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
@@ -15,14 +15,20 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
     once(channel, func) {
-      const validChannels = ['ipc-example', 'open-dialog'];
+      const validChannels = [
+        'ipc-example',
+        'open-dialog',
+        'search-volume',
+        'get-file-length',
+        'parse-bibtex-file',
+      ];
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.once(channel, (event, ...args) => func(...args));
       }
     },
     openDialog() {
-      ipcRenderer.send('open-dialog', 'hello')
-    }
+      ipcRenderer.send('open-dialog', 'hello');
+    },
   },
 });
