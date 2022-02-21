@@ -145,6 +145,8 @@ fn distance(ar1: SparseProbabilityArray, ar2: SparseProbabilityArray) -> f64 {
 }
  
 pub fn compute(str1: &str, str2: &str) -> f64 {
+    if str1 == "" || str2 == "" { return 0.0 }
+
     let sed = build_js(255);
     let s1 = string_to_sparse_array(str1, &sed);
     let s2 = string_to_sparse_array(str2, &sed);

@@ -1,6 +1,6 @@
 use neon::prelude::*;
 use crate::datatypes::bibentry::BibEntry;
-use crate::string_matchers::jenson_shanning_vector;
+use crate::jenson_shanning_vector;
 
 pub fn remove_direct_duplicates(entries: Vec<BibEntry>) -> NeonResult<Vec<BibEntry>> {
     let mut entries_cleaned: Vec<BibEntry> = Vec::new();
@@ -28,6 +28,7 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
 
     for i in 0..entries.len() {
 
+        // TODO: worth removing this line?
         if is_removed_arr[i] { continue; }
 
         for j in (i+1)..entries.len() {
@@ -37,12 +38,19 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
             let entry1 = entries.get(i).unwrap();
             let entry2 = entries.get(j).unwrap();
 
-            let entry1_str = entry1.to_string();
-            let entry2_str = entry2.to_string();
+            // grab relevant fields
+            let entry1_author = entry1.get_field("author");
+            let entry1_title = entry1.get_field("author");
 
-            // compute difference score
-            let score = jenson_shanning_vector::compute(&entry1_str, &entry2_str); 
+            let entry2_author = entry2.get_field("title");
+            let entry2_title = entry2.get_field("title");
             
+            let author_score = jenson_shanning_vector::compute(&entry1_author, &entry2_author);
+            let title_score = jenson_shanning_vector::compute(&entry1_title, &entry2_title); 
+            
+            // compute average score
+            let score = (author_score + title_score) / 2.0;
+
             // then too similar
             if score < threshold {
                 // set isRemoved to true (for latter, we keep the first in the array)

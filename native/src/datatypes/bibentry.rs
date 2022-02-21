@@ -84,4 +84,14 @@ impl BibEntry {
         bib
     }
 
+    pub fn get_field(&self, field_name: &str) -> String {
+        let field_item = self.fields.iter().find(|&field| field.field_name.to_lowercase() == field_name);
+
+        let unwrapped_val = match field_item {
+            Some(entry) => entry.to_owned().field_value,
+            None => String::from(""),
+        };
+
+        unwrapped_val
+    }
 }
