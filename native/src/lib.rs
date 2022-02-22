@@ -223,6 +223,7 @@ pub fn jenson_shanning_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+/// Given a valid path to a file, returns the length of that file in bytes
 pub fn get_file_size(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1_handle = cx.argument::<JsString>(0)?;
 
