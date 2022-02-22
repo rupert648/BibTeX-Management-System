@@ -90,8 +90,24 @@ function FileRow({
     }
   };
 
+  const rowClick = () => {
+    const checked = !isChecked;
+    setChecked(!isChecked);
+
+    if (checked) {
+      // add to array
+      setCheckedFiles([...checkedFiles, file]);
+    } else {
+      // remove from array
+      setCheckedFiles(checkedFiles.filter((f) => f !== file));
+    }
+  };
+
   return (
-    <StyledTableRow>
+    <StyledTableRow
+      sx={{ cursor: 'pointer' }}
+      onClick={rowClick}
+    >
       <StyledTableCell>
         <Checkbox
           id={`fileCheckBox_${index}`}

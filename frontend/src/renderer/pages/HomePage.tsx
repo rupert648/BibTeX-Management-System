@@ -36,8 +36,6 @@ function HomePage() {
       <HomePageMenuBar setFoundFiles={setFoundFiles} />
       <HomeSubtitle
         text="Found Files"
-        numberFilesFound={foundFiles.length}
-        homePage
       />
       <SelectedFiles
         foundFiles={foundFiles}

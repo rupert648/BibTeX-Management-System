@@ -44,20 +44,17 @@ function HomePageMenuBar({ setFoundFiles }: HomePageMenuBarProps) {
       }}
     >
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" size="small" color="primary">
-          Upload
-        </Button>
         <Button variant="outlined" onClick={openDialog}>
           Select Directory
         </Button>
         <TextField
-          label="Selected Directory Path"
+          label="Selected Directory To Search"
           value={directoryPath}
           sx={{
-            width: '500px',
+            width: '900px',
           }}
           disabled
-          variant="outlined"
+          variant="filled"
         />
         <IconButton onClick={searchVolume}>
           <Search />

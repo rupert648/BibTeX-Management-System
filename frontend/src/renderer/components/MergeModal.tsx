@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, Box, TextField, Button, Stack } from '@mui/material';
+import {
+  Modal, Box, TextField, Button, Stack, TableRow, TableCell, Table, TableBody,
+} from '@mui/material';
 import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcRenderer } from 'electron';
@@ -13,6 +15,7 @@ interface MergeModalProps {
 function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) {
   const [filePath, setFilePath] = useState('');
   const [mergeError, setMergeError] = useState(false);
+  const [mergeSuccess, setMergeSuccess] = useState(false);
 
   const openDialog = () => {
     ipcRenderer.on('select-file', (_event, arg) => {
@@ -25,17 +28,17 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
   };
 
   const attemptToMerge = () => {
+    setMergeError(false);
+    setMergeSuccess(false);
+
     if (!filePath) {
       setMergeError(true);
       return;
     }
 
-    setMergeError(false);
-
     ipcRenderer.on('merge-response', (_event, arg) => {
       if (arg && arg.status === 'OK') {
-        console.log("success!");
-        setMergeError(false);
+        setMergeSuccess(true);
       } else {
         setMergeError(true);
       }
@@ -44,13 +47,23 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
     ipcRenderer.send('merge', { files: checkedFiles, resultPath: filePath });
   };
 
-  const getFirst5 = () => checkedFiles.slice(0, 6);
+  const getFirst5 = () => {
+    const first5 = checkedFiles.slice(0, 6);
+
+    return first5.map((file) => (
+      <TableRow>
+        <TableCell>
+          {path.parse(file).base}
+        </TableCell>
+      </TableRow>
+    ));
+  };
 
   return (
     <Modal
       open={modalOpen}
       onClose={() => setModalOpen(!modalOpen)}
-    > 
+    >
       <Box sx={{
         position: 'absolute',
         top: '50%',
@@ -65,14 +78,16 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
       >
         <Stack spacing={2}>
           <h3>You wish to merge the following files</h3>
-          {
-            getFirst5().map((file) => <p>{file}</p>)
-          }
-          {
-            checkedFiles.length > 5 ? (
-              <p>{`... plus ${checkedFiles.length - 5} more`}</p>
-            ) : null
-          }
+          <Table>
+            {
+              checkedFiles.length > 5 ? (
+                <caption>{`... plus ${checkedFiles.length - 5} more`}</caption>
+              ) : null
+            }
+            <TableBody>
+              {getFirst5()}
+            </TableBody>
+          </Table>
           <Button variant="outlined" onClick={openDialog}>
             Select File
           </Button>
@@ -92,7 +107,23 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
         </Stack>
         {
           mergeError
-          && <p>Error merging these files</p>
+          && <div>Error merging these files</div>
+        }
+        {
+          mergeSuccess
+          && (
+          <Box
+            sx={{
+              position: 'relative',
+              float: 'left',
+              fontSize: '15px',
+              lineHeight: '16px',
+              overflow: 'hidden',
+            }}
+          >
+            <p>Successfully Merged the Files</p>
+          </Box>
+          )
         }
       </Box>
     </Modal>
