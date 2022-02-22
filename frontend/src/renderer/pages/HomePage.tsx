@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
-import React, { useState } from 'react';
-import { Stack, Divider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Stack } from '@mui/material';
 
 import HomeSubtitle from '../components/HomeSubtitle';
 import ActionsStack from '../components/ActionsStack';
@@ -8,12 +8,18 @@ import FilePage from './FilePage';
 import FilePageMenuBar from '../components/FilePageMenuBar';
 import HomePageMenuBar from '../components/HomePageMenuBar';
 import SelectedFiles from '../components/SelectedFiles';
+import MergeModal from '../components/MergeModal';
 
 function HomePage() {
   const [foundFiles, setFoundFiles] = useState([]);
   const [fileOpen, setFileOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
   const [checkedFiles, setCheckedFiles] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!fileOpen) setCheckedFiles([]);
+  }, [fileOpen]);
 
   if (fileOpen) {
     return (
@@ -40,8 +46,8 @@ function HomePage() {
         setCheckedFiles={setCheckedFiles}
         checkedFiles={checkedFiles}
       />
-      <Divider />
-      <ActionsStack />
+      <ActionsStack numbFiles={checkedFiles.length} setModalOpen={setModalOpen} />
+      <MergeModal modalOpen={modalOpen} setModalOpen={setModalOpen} checkedFiles={checkedFiles} />
     </Stack>
   );
 }

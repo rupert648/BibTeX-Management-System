@@ -38,23 +38,23 @@ function FileRow({
   const getFileName = () => path.basename(file);
 
   const getFileLength = () => {
-    ipcRenderer.on('get-file-length', (_event, arg) => {
+    ipcRenderer.on(`get-file-length-${index}`, (_event, arg) => {
       if (arg) {
         setFileLength(arg);
       }
     });
 
-    ipcRenderer.send('get-file-length', file);
+    ipcRenderer.send('get-file-length', { file, index });
   };
 
   const getNumberEntries = () => {
-    ipcRenderer.on('parse-bibtex-file', (_event, arg) => {
+    ipcRenderer.on(`parse-bibtex-file-${index}`, (_event, arg) => {
       if (arg && arg.status === 'OK') {
         setEntries(arg.entries);
       }
     });
 
-    ipcRenderer.send('parse-bibtex-file', file);
+    ipcRenderer.send('parse-bibtex-file', { file, index });
   };
 
   useEffect(() => {

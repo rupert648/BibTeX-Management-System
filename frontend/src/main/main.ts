@@ -1,4 +1,4 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
+/* eslint-disable import/no-extraneous-dependencies */
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -40,19 +40,35 @@ ipcMain.on('open-dialog', async (event, _arg) => {
   event.reply('open-dialog', result);
 });
 
+// eslint-disable-next-line no-unused-vars
+ipcMain.on('select-file', async (event, _arg) => {
+  const result = await dialog.showOpenDialog({ properties: ['promptToCreate'] });
+  event.reply('select-file', result);
+});
+
 ipcMain.on('search-volume', async (event, arg) => {
   const result = backend.searchVolume(arg);
   event.reply('search-volume', result);
 });
 
 ipcMain.on('get-file-length', async (event, arg) => {
-  const result = backend.getFileSize(arg);
-  event.reply('get-file-length', result);
+  const result = backend.getFileSize(arg.file);
+  event.reply(`get-file-length-${arg.index}`, result);
 });
 
 ipcMain.on('parse-bibtex-file', async (event, arg) => {
-  const result = backend.parseBibTexFile(arg);
-  event.reply('parse-bibtex-file', result);
+  const result = backend.parseBibTexFile(arg.file);
+  event.reply(`parse-bibtex-file-${arg.index}`, result);
+});
+
+ipcMain.on('merge', async (event, arg) => {
+  // TODO: tinker
+  const threshold = 0.28;
+  const { files, resultPath } = arg;
+  const result = backend.mergeBibTexFiles(files, resultPath, threshold);
+  console.log(result);
+
+  event.reply('merge-response', result);
 });
 
 if (process.env.NODE_ENV === 'production') {

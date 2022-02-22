@@ -35,7 +35,7 @@ function EntryRow({ entry, StyledTableCell }: EntryRowProps) {
       for (let i = 0; i < entry.fields.length; i++) {
         const { fieldName, fieldValue } = entry.fields[i];
 
-        if (fieldName === valueName) {
+        if (fieldName.toLowerCase() === valueName) {
           result = fieldValue;
           break;
         }

@@ -85,7 +85,7 @@ function SelectedFiles({
           component={Paper}
           sx={{
             width: '100%',
-            overflow: 'hidden',
+            maxHeight: '500px',
           }}
         >
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -112,7 +112,13 @@ function SelectedFiles({
                 </StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>{foundFiles.map(createFileRow)}</TableBody>
+            <TableBody 
+              sx={{
+                overflow: 'scroll',
+              }}
+            >
+              {foundFiles.map(createFileRow)}
+            </TableBody>
           </Table>
         </TableContainer>
       </Container>

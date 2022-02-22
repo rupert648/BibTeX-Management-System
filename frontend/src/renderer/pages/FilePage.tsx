@@ -40,13 +40,13 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
 
   useEffect(() => {
     // on load get entries
-    ipcRenderer.on('parse-bibtex-file', (_event, arg) => {
+    ipcRenderer.on('parse-bibtex-file-1', (_event, arg) => {
       if (arg && arg.status === 'OK') {
         setEntries(arg.entries);
       }
     });
 
-    ipcRenderer.send('parse-bibtex-file', file);
+    ipcRenderer.send('parse-bibtex-file', { file, index: 1 });
   }, []);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -66,7 +66,8 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
   const entriesToMap = () => {
     if (!entries) return [];
     // only render first 10 for now
-    return entries.slice(0, 10);
+    // return entries.slice(0, 10);
+    return entries;
   };
 
   return (
@@ -76,15 +77,14 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
         sx={{
           width: '100%',
           minHeight: '600px',
-          maxHeight: '1000px',
-          overflow: 'scroll',
         }}
       >
         <TableContainer
           component={Paper}
           sx={{
             width: '100%',
-            overflow: 'hidden',
+            overflow: 'scroll',
+            maxHeight: '700px',
           }}
         >
           <Table sx={{ minWidth: 700 }} aria-label="customized table">

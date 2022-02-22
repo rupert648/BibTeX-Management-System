@@ -9,7 +9,6 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
 
     let mut cost;
 
-    // TODO: This part is questionable
     if source_len == 0 || target_len == 0 {
         if source_len == target_len {
             return 1.0;
@@ -20,7 +19,6 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
 
     // if either smaller than ngram, just do hamming
     if source_len < ngram_size.try_into().unwrap() || target_len < ngram_size.try_into().unwrap() {
-        // TODO: Check the conversion here - different scoring metrics
         return (hamming::compute(source, target)/cmp::max(source_len as i32, target_len as i32)) as f64;
     }
 

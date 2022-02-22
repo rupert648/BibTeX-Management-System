@@ -60,9 +60,15 @@ fn string_to_sparse_array(s: &str, js_instance: &JS) -> SparseProbabilityArray {
     spa_add_event((ch1 as i32) * js_instance.char_val_upb + (ch2 as i32), 1, &mut spa);
 
     for i in 0..(s.len() as i32) {
-        ch1 = s.chars().nth(i as usize).unwrap();
+        ch1 = match s.chars().nth(i as usize) {
+            Some(c) => c,
+            None => {
+                // should never get here but somehow sometimes do ??
+                // return generic space character to not break alg
+                ' '
+            }
+        };
         spa_add_event(ch1 as i32, 2, &mut spa);
-        // spa.addEvent(ch1, 2)
         if (ch1 as i32) > js_instance.char_val_upb || ch1 == '\0' {
             // ahhhh
             panic!();
@@ -72,7 +78,10 @@ fn string_to_sparse_array(s: &str, js_instance: &JS) -> SparseProbabilityArray {
             // if ch2 (i + 1) is out of bounds
             ch2 = '\0';
         } else {
-            ch2 = s.chars().nth((i as usize)+1).unwrap();
+            ch2 = match s.chars().nth((i as usize)+1) {
+                Some(c) => c,
+                None => '\0'
+            }
         }
 
         spa_add_event((ch1 as i32) * js_instance.char_val_upb + (ch2 as i32), 1, &mut spa);

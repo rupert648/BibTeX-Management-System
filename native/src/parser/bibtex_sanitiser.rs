@@ -25,7 +25,6 @@ fn is_comment(line: &str) -> bool {
 }
 
 pub fn is_properly_formatted(entry: &str) -> bool {
-    // TODO: Add more sanitisation checks
     // TODO: Merge below functions so only one pass is done - less clean but faster?
     is_equal_curly_brackets(entry) &&
     is_equal_quotations(entry)
