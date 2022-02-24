@@ -71,6 +71,37 @@ ipcMain.on('merge', async (event, arg) => {
   event.reply('merge-response', result);
 });
 
+// 'damerau_levenshtein',
+//         'hamming',
+//         'levenshtein',
+//         'ngram',
+//         'jenson shanning vector'
+
+ipcMain.on('damerau-levenshtein', async (event, arg) => {
+  const result = backend.damerauLevenshtein(arg.string1, arg.string2);
+  event.reply('damerau-levenshtein', result);
+})
+
+ipcMain.on('hamming', async (event, arg) => {
+  const result = backend.hamming(arg.string1, arg.string2);
+  event.reply('hamming', result);
+})
+
+ipcMain.on('levenshtein', async (event, arg) => {
+  const result = backend.levenshtein(arg.string1, arg.string2);
+  event.reply('levenshtein', result);
+})
+
+ipcMain.on('ngram', async (event, arg) => {
+  const result = backend.ngram(arg.string1, arg.string2, 2);
+  event.reply('ngram', result);
+})
+
+ipcMain.on('jenson-shanning-vector', async (event, arg) => {
+  const result = backend.jensonShanningVector(arg.string1, arg.string2);
+  event.reply('jenson-shanning-vector', result);
+})
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -116,7 +147,6 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      // preload: path.join(__dirname, 'preload.js'),
     },
   });
 

@@ -25,7 +25,7 @@ function HomePage() {
     return (
       <Stack>
         <FilePageMenuBar setFileOpen={setFileOpen} />
-        <HomeSubtitle text={selectedFile} homePage={false} />
+        <HomeSubtitle text={selectedFile} />
         <FilePage file={selectedFile} setFileOpen={setFileOpen} />
       </Stack>
     );
