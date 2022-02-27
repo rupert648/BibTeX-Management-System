@@ -34,9 +34,6 @@ function HomePage() {
   return (
     <Stack>
       <HomePageMenuBar setFoundFiles={setFoundFiles} />
-      <HomeSubtitle
-        text="Found Files"
-      />
       <SelectedFiles
         foundFiles={foundFiles}
         setFileOpen={setFileOpen}

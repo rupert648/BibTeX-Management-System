@@ -37,7 +37,9 @@ function FileRow({
     file.checked = updateChecked
   }, [updateChecked]);
 
-  const getFileName = () => path.basename(file.fileName);
+  const getFileName = () => {
+    return path.basename(file.fileName);
+  };
 
   const getFileLength = () => {
     ipcRenderer.on(`get-file-length-${index}`, (_event, arg) => {
@@ -51,9 +53,10 @@ function FileRow({
 
   const getNumberEntries = () => {
     ipcRenderer.on(`parse-bibtex-file-${index}`, (_event, arg) => {
-      if (arg && arg.status === 'OK') {
+      if (arg) {
         setEntries(arg.entries);
       }
+      // TODO: error handling of non STATUS==='OK
     });
 
     ipcRenderer.send('parse-bibtex-file', { file: file.fileName, index });
@@ -62,9 +65,10 @@ function FileRow({
   useEffect(() => {
     getNumberEntries();
     getFileLength();
-  }, []);
+  }, [file]);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
+
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
@@ -107,7 +111,7 @@ function FileRow({
 
   return (
     <StyledTableRow
-      sx={{ cursor: 'pointer' }}
+      sx={{ cursor: 'pointer'}}
       onClick={rowClick}
     >
       <StyledTableCell>
@@ -119,7 +123,7 @@ function FileRow({
         />
       </StyledTableCell>
       <StyledTableCell component="th" scope="row">
-        {getFileName()}
+        {getFileName()} 
       </StyledTableCell>
       <StyledTableCell align="right">{entries.length}</StyledTableCell>
       <StyledTableCell align="right">{fileLength}</StyledTableCell>

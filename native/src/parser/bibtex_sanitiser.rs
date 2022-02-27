@@ -21,6 +21,10 @@ pub fn clean_bibtex(bibtex_string: String) -> NeonResult<String> {
 // luckily for us a comment in bibtex must be a whole line
 fn is_comment(line: &str) -> bool {
     let trimmed = line.trim();
+
+    // check if line is empty after trim (found otherwise it breaks on lines with tabs)
+    if trimmed.is_empty() { return true }
+
     let first_char = trimmed.chars().next().unwrap();
 
     first_char == '%'

@@ -57,7 +57,7 @@ function HomePageMenuBar({ setFoundFiles }: HomePageMenuBarProps) {
             width: '900px',
           }}
           disabled
-          variant="filled"
+          variant="outlined"
         />
         <IconButton onClick={searchVolume}>
           <Search />

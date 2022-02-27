@@ -10,7 +10,7 @@ import './App.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#000000',
+      main: '#2F4F4F',
     },
     secondary: {
       // This is green.A700 as hex.

@@ -54,8 +54,6 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
 
             // then too similar
             if score < threshold {
-                println!("Entry1 {:?}", entry1);
-                println!("Entry2 {:?}", entry2);
                 // set isRemoved to true (for latter, we keep the first in the array)
                 is_removed_arr[j] = true;
             }

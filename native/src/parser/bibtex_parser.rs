@@ -5,41 +5,54 @@ use crate::parser::bibtex_sanitiser;
 use neon::prelude::*;
 use std::str::Chars;
 
-pub fn parse_bibtex_string(bibtex_string: String) -> NeonResult<Vec<BibEntry>> {
+#[derive(Debug, Clone)]
+pub struct ParseResult {
+    pub bibtex_entries: Vec<BibEntry>,
+    pub result: bool
+}
+
+pub fn parse_bibtex_string(bibtex_string: String) -> NeonResult<ParseResult> {
     let bibtex_string_clean = bibtex_sanitiser::clean_bibtex(bibtex_string)?;
 
-    let bibtex_entries: Vec<BibEntry> = parse_entries(bibtex_string_clean)?;
+    let bibtex_entries: ParseResult = parse_entries(bibtex_string_clean)?;
 
     Ok(bibtex_entries)
 }
 
-fn parse_entries(bibtex_string: String) -> NeonResult<Vec<BibEntry>> {
+fn parse_entries(bibtex_string: String) -> NeonResult<ParseResult> {
     let entries_iter = bibtex_string.split("@");
     let mut entries_parsed: Vec<BibEntry> = Vec::new();
+
+    let mut parse_success = true;
 
     for entry in entries_iter {
         if !entry.is_empty() {
             match parse_entry(entry.to_string()) {
                 Ok(bib_entry_no_error) => entries_parsed.push(bib_entry_no_error),
-                Err(_) => continue,
+                // ignore error and continue to parse rest of file
+                Err(_) => {
+                    parse_success = false;
+                    continue;
+                },
             };
         }
     }
 
-    Ok(entries_parsed)
+    Ok(ParseResult {
+        bibtex_entries: entries_parsed,
+        result: parse_success
+    })
 }
 
 fn parse_entry(entry_string: String) -> NeonResult<BibEntry> {
-    if !bibtex_sanitiser::is_properly_formatted(&entry_string) {
-        print_error_message(format!("IMPROPERLY FORMATTED ENTRY:\n{}\n", entry_string));
+    if !bibtex_sanitiser::is_properly_formatted(&entry_string) || entry_string.trim().is_empty() {
+        // debugging
+        // print_error_message(format!("IMPROPERLY FORMATTED ENTRY:\n{}\n", entry_string));
         return Err(neon::result::Throw);
     }
 
     let entry_iterator = entry_string.chars();
     let entry = consume_entry_type(entry_iterator)?;
-    // let name = get_entry_name(&entry_string)?;
-    // println!("name: {}\n", name);
-    // let fields = get_entry_fields(&entry_string);
     
     Ok(entry)
 }
@@ -66,7 +79,10 @@ fn consume_entry_name(mut entry_iterator: Chars, entry_type: String) -> NeonResu
     let mut current: char = entry_iterator.next().unwrap();
     while current != ',' {
         name.push(current);
-        current  = entry_iterator.next().unwrap();
+        current  = match entry_iterator.next() {
+            Some(c) => c,
+            None => return Err(neon::result::Throw)
+        }
     }
 
     consume_fields(entry_iterator, entry_type, name)

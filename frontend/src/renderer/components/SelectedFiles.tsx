@@ -27,6 +27,7 @@ import { styled } from '@mui/material/styles';
 
 // eslint-disable-next-line import/no-unresolved
 import FileRow from './FileRow';
+import EnhancedTableToolbar from './EnhancedTableToolbar';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -143,18 +144,21 @@ function SelectedFiles({
     },
   }));
 
-  const createFileRow = (file: any, index: number) => (
-    <FileRow
-      file={file}
-      StyledTableCell={StyledTableCell}
-      setFileOpen={setFileOpen}
-      setSelectedFile={setSelectedFile}
-      setCheckedFiles={setCheckedFiles}
-      checkedFiles={checkedFiles}
-      index={index}
-      updateChecked={updateChecked}
-    />
-  );
+  const createFileRow = (file: any, index: number) => {
+    return (
+      <FileRow
+        key={index}
+        file={file}
+        StyledTableCell={StyledTableCell}
+        setFileOpen={setFileOpen}
+        setSelectedFile={setSelectedFile}
+        setCheckedFiles={setCheckedFiles}
+        checkedFiles={checkedFiles}
+        index={index}
+        updateChecked={updateChecked}
+      />
+    )
+  };
 
   const handleCheckboxChange = (event: any) => {
     const { checked } = event.target;
@@ -168,7 +172,6 @@ function SelectedFiles({
     }
   };
 
-  // TODO: fix selections not working between paginations
 
   return (
     <div>
@@ -180,13 +183,14 @@ function SelectedFiles({
           overflow: 'hidden',
         }}
       >
-        <TableContainer
-          component={Paper}
+        <Paper
           sx={{
             width: '100%',
             maxHeight: '500px',
           }}
         >
+        <EnhancedTableToolbar numSelected={checkedFiles.length} />
+        <TableContainer >
           <Table stickyHeader sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
@@ -247,6 +251,7 @@ function SelectedFiles({
             </TableFooter>
           </Table>
         </TableContainer>
+        </Paper>
       </Container>
     </div>
   );

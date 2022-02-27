@@ -23,6 +23,15 @@ function Algorithms() {
         'jenson shanning vector'
     ];
 
+    const displayValue = (): string => {
+        switch (algorithmChoice) {
+            case 'jenson shanning vector':
+            case 'ngram':
+                return (value / 100).toFixed(2);
+            default: return value.toString();
+        }
+    }
+
     return (
         <div>
             <Container>
@@ -41,7 +50,7 @@ function Algorithms() {
                     </Select>
                 </FormControl>
 
-                <ThresholdSlider value={value} setValue={setValue} algorithm={algorithmChoice} />
+                <ThresholdSlider value={value} setValue={setValue} displayValue={displayValue} />
                 <Divider />
 
                 <Stack direction="row" spacing={2} sx={{
@@ -73,7 +82,7 @@ function Algorithms() {
                 <div style={{ marginTop: "10px" }}>
                     <Divider />
                 </div>
-                <ScoreArea algorithm={algorithmChoice} string1={string1} string2={string2}/>
+                <ScoreArea algorithm={algorithmChoice} string1={string1} string2={string2} threshold={Number(displayValue())}/>
             </Container>
         </div>
     )

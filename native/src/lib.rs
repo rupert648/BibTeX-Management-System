@@ -12,6 +12,7 @@ use crate::string_matchers::{
     ngram,
     jenson_shanning_vector
 };
+use crate::parser::bibtex_parser::ParseResult;
 
 // modules
 mod datatypes;
@@ -72,7 +73,7 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     let mut entries: Vec<BibEntry> = Vec::new();
     for file_content in file_contents {
         let mut temp = parser::bibtex_parser::parse_bibtex_string(file_content)?;
-        entries.append(&mut temp);
+        entries.append(&mut temp.bibtex_entries);
     }
 
     entries = duplicate::remove_direct_duplicates(entries)?;
@@ -96,14 +97,14 @@ pub fn remove_duplicates_from_bibtex_string(mut cx: FunctionContext) -> JsResult
     let bibtex_string = js_bibtex_string.value(&mut cx);
     let threshold = js_threshold.value(&mut cx) as f64;
 
-    let mut entries: Vec<BibEntry> = parser::bibtex_parser::parse_bibtex_string(bibtex_string)?;
+    let mut entries: ParseResult = parser::bibtex_parser::parse_bibtex_string(bibtex_string)?;
 
     // remove dups
-    entries = duplicate::remove_direct_duplicates(entries)?;
-    entries = duplicate::remove_highly_similar_duplicates(entries, threshold)?;
+    entries.bibtex_entries = duplicate::remove_direct_duplicates(entries.bibtex_entries)?;
+    entries.bibtex_entries = duplicate::remove_highly_similar_duplicates(entries.bibtex_entries, threshold)?;
 
     // return result
-    let entries_string = utility::create_bib_string(entries)?;
+    let entries_string = utility::create_bib_string(entries.bibtex_entries)?;
     Ok(cx.string(entries_string))
 }
 
@@ -144,7 +145,6 @@ pub fn hamming(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
 
-    println!("String 1: {}\nString 2: {}", &string1, &string2);
     let result = hamming::compute(&string1, &string2);
 
     Ok(cx.number(result))
@@ -161,7 +161,6 @@ pub fn levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
 
-    println!("String 1: {}\nString 2: {}", &string1, &string2);
     let result = levenshtein::compute(&string1, &string2);
 
     Ok(cx.number(result))
@@ -180,7 +179,6 @@ pub fn damerau_levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
 
-    println!("String 1: {}\nString 2: {}", &string1, &string2);
     let result = damerau_levenshtein::compute(&string1, &string2);
 
     Ok(cx.number(result))
@@ -199,7 +197,6 @@ pub fn ngram(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string2 = string2_handle.value(&mut cx);
     let n = ngram_handle.value(&mut cx) as i32;
 
-    println!("String 1: {}\nString 2: {}", &string1, &string2);
     let result = ngram::compute(&string1, &string2, n);
 
     Ok(cx.number(result))
@@ -217,7 +214,6 @@ pub fn jenson_shanning_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
 
-    println!("String 1: {}\nString 2: {}", &string1, &string2);
     let result = jenson_shanning_vector::compute(&string1, &string2);
 
     Ok(cx.number(result))

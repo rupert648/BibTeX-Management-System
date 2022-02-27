@@ -2,6 +2,7 @@ use neon::prelude::*;
 use std::fs;
 use std::path::PathBuf;
 
+use crate::parser::bibtex_parser::ParseResult;
 use crate::datatypes::bibentry::BibEntry;
 
 pub fn js_string_array_to_vec(js_array: Handle<JsArray>, cx: &mut FunctionContext) -> NeonResult<Vec<String>> {
@@ -55,14 +56,14 @@ pub fn is_file_valid(path: &str) -> bool {
     pathbuf.extension().unwrap() == "bib"
 }
 
-pub fn create_entries_return_object<'a>(entries: Vec<BibEntry>, cx: &mut FunctionContext<'a>) -> JsResult<'a, JsObject> {
+pub fn create_entries_return_object<'a>(entries: ParseResult, cx: &mut FunctionContext<'a>) -> JsResult<'a, JsObject> {
     let obj = cx.empty_object();
 
-    let status = cx.string("OK");
+    let status = cx.string(if entries.result { "OK" } else { "BAD_ENTRY"});
     obj.set(cx, "status", status)?;
 
-    let js_arr = JsArray::new(cx, entries.len() as u32);
-    for (i, entry) in entries.iter().enumerate() {
+    let js_arr = JsArray::new(cx, entries.bibtex_entries.len() as u32);
+    for (i, entry) in entries.bibtex_entries.iter().enumerate() {
         let obj = entry.to_object(cx)?;
         js_arr.set(cx, i as u32, obj)?;
     }
