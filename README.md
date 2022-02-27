@@ -8,5 +8,5 @@ To develop a lightweight, fast desktop application for collating and merging `.b
  - [x] hamming
  - [x] levenschtein
  - [x] damerau-levenschtein
- - [ ] ngram
- - [ ] Richard Connor
+ - [x] ngram
+ - [x] Richard Connor
