@@ -2,19 +2,21 @@ use neon::prelude::*;
 
 pub fn clean_bibtex(bibtex_string: String) -> NeonResult<String> {
     let lines = bibtex_string.split("\n");
-    let mut lines_vec: Vec<&str> = lines.collect();
+
+    // remove non-ascii characters
+    // important for efficiency of jenson alg
+    let lines_cleaned = lines.map(|x| x.replace(|c: char| !c.is_ascii(), ""));
+
+    let mut lines_vec: Vec<String> = lines_cleaned.collect();
     
     // retains only non comments and non-empty lines
-    lines_vec.retain(|&line| 
+    lines_vec.retain(|line| 
         !line.is_empty() && 
-        !is_comment(line)
+        !is_comment(&line)
     );
 
-
-    // return rejoin strings
     Ok(lines_vec.join("\n"))
 }
-
 
 // luckily for us a comment in bibtex must be a whole line
 fn is_comment(line: &str) -> bool {
