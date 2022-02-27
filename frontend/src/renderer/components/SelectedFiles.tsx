@@ -97,7 +97,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 interface SelectedFilesProps {
-  foundFiles: Array<string>;
+  foundFiles: Array<{fileName: string, checked: boolean}>;
   setFileOpen: Function;
   setSelectedFile: Function;
   setCheckedFiles: Function;
@@ -143,7 +143,7 @@ function SelectedFiles({
     },
   }));
 
-  const createFileRow = (file: string, index: number) => (
+  const createFileRow = (file: any, index: number) => (
     <FileRow
       file={file}
       StyledTableCell={StyledTableCell}
@@ -162,7 +162,7 @@ function SelectedFiles({
 
     setUpdateChecked(checked);
     if (checked) {
-      setCheckedFiles(foundFiles);
+      setCheckedFiles(foundFiles.map(f => f.fileName));
     } else {
       setCheckedFiles([]);
     }

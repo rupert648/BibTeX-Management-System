@@ -1,27 +1,33 @@
-import { Box, Typography, Grid, Slider, Input } from '@mui/material';
+import { Box, Typography, Grid, Slider } from '@mui/material';
 
 interface ThresholdSliderProps {
     value: number,
-    setValue: Function
+    setValue: Function,
+    algorithm: string
 }
 
-function ThresholdSlider({ value, setValue }: ThresholdSliderProps) {
+function ThresholdSlider({ value, setValue, algorithm }: ThresholdSliderProps) {
 
     const handleSliderChange = (event: Event, newValue: number | number[]) => {
         setValue(newValue);
     };
-    
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value === '' ? '' : Number(event.target.value));
-    };
 
-    const handleBlur = () => {
-        if (value < 0) {
-            setValue(0);
-        } else if (value > 100) {
-            setValue(100);
+    // const algorithms: Array<string> = [
+    //     'damerau_levenshtein',
+    //     'hamming',
+    //     'levenshtein',
+    //     'ngram',
+    //     'jenson shanning vector'
+    // ];
+
+    const displayValue = (): string => {
+        switch (algorithm) {
+            case 'jenson shanning vector':
+            case 'ngram':
+                return (value / 100).toFixed(2);
+            default: return value.toString();
         }
-    };
+    }
 
     return (
         <Box sx={{ width: 250 }}>
@@ -37,19 +43,7 @@ function ThresholdSlider({ value, setValue }: ThresholdSliderProps) {
                 />
                 </Grid>
                 <Grid item>
-                <Input
-                    value={value}
-                    size="small"
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    inputProps={{
-                        step: 5,
-                        min: 0,
-                        max: 100,
-                        type: 'number',
-                        'aria-labelledby': 'input-slider',
-                    }}
-                />
+                    <span>{displayValue()}</span>
                 </Grid>
             </Grid>
             </Box>

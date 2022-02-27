@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Modal, Box, TextField, Button, Stack, TableRow, TableCell, Table, TableBody,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcRenderer } from 'electron';
@@ -17,9 +18,12 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
   const [mergeError, setMergeError] = useState(false);
   const [mergeSuccess, setMergeSuccess] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const openDialog = () => {
     ipcRenderer.on('select-file', (_event, arg) => {
-      if (arg && !arg.cancelled) {
+      console.log(arg)
+      if (arg && !arg.canceled) {
         // assume one filePath
         setFilePath(arg.filePaths[0]);
       }
@@ -30,6 +34,7 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
   const attemptToMerge = () => {
     setMergeError(false);
     setMergeSuccess(false);
+    setIsLoading(false);
 
     if (!filePath) {
       setMergeError(true);
@@ -37,14 +42,18 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
     }
 
     ipcRenderer.on('merge-response', (_event, arg) => {
+      console.log(arg);
       if (arg && arg.status === 'OK') {
         setMergeSuccess(true);
       } else {
         setMergeError(true);
       }
+
+      setIsLoading(false);
     });
 
     ipcRenderer.send('merge', { files: checkedFiles, resultPath: filePath });
+    setIsLoading(true);
   };
 
   const getFirst5 = () => {
@@ -89,8 +98,9 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
             </TableBody>
           </Table>
           <Button variant="outlined" onClick={openDialog}>
-            Select File
+            Select Output File
           </Button>
+          <p style={{color: 'red'}}><b>Please Note:</b> choosing a file will overwrite its contents. Please don't choose a file you dont want to loose! (we recommend creating a new file)</p>
           <TextField
             label="Selected File Path"
             value={path.parse(filePath).base}
@@ -101,8 +111,8 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
             variant="outlined"
           />
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" color="success" onClick={attemptToMerge}>Merge</Button>
-            <Button variant="contained" color="error" onClick={() => setModalOpen(!modalOpen)}>Cancel</Button>
+            <LoadingButton variant="contained" color="success" loading={isLoading} onClick={attemptToMerge}>Merge</LoadingButton>
+            <LoadingButton variant="contained" color="error" disabled={isLoading} onClick={() => setModalOpen(!modalOpen)}>Cancel</LoadingButton>
           </Stack>
         </Stack>
         {

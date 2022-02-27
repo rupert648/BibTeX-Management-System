@@ -6,7 +6,10 @@ import { styled } from '@mui/material/styles';
 import { ipcRenderer } from 'electron';
 
 interface FileCardProps {
-  file: string;
+  file: {
+    fileName: string,
+    checked: boolean
+  };
   StyledTableCell: Function;
   setFileOpen: Function;
   setSelectedFile: Function;
@@ -27,15 +30,14 @@ function FileRow({
   updateChecked,
 }: FileCardProps) {
   const [entries, setEntries] = useState([]);
-  const [isChecked, setChecked] = useState(false);
   const [fileLength, setFileLength] = useState(0);
 
   // watch for updateChecked in order to set all to true or false
   useEffect(() => {
-    setChecked(updateChecked);
+    file.checked = updateChecked
   }, [updateChecked]);
 
-  const getFileName = () => path.basename(file);
+  const getFileName = () => path.basename(file.fileName);
 
   const getFileLength = () => {
     ipcRenderer.on(`get-file-length-${index}`, (_event, arg) => {
@@ -44,7 +46,7 @@ function FileRow({
       }
     });
 
-    ipcRenderer.send('get-file-length', { file, index });
+    ipcRenderer.send('get-file-length', { file: file.fileName , index });
   };
 
   const getNumberEntries = () => {
@@ -54,7 +56,7 @@ function FileRow({
       }
     });
 
-    ipcRenderer.send('parse-bibtex-file', { file, index });
+    ipcRenderer.send('parse-bibtex-file', { file: file.fileName, index });
   };
 
   useEffect(() => {
@@ -73,33 +75,33 @@ function FileRow({
   }));
 
   const fileClicked = () => {
-    setSelectedFile(file);
+    setSelectedFile(file.fileName);
     setFileOpen(true);
   };
 
   const handleCheckboxChange = (event: any) => {
     const { checked } = event.target;
-    setChecked(checked);
+    file.checked = checked;
 
     if (checked) {
       // add to array
-      setCheckedFiles([...checkedFiles, file]);
+      setCheckedFiles([...checkedFiles, file.fileName]);
     } else {
       // remove from array
-      setCheckedFiles(checkedFiles.filter((f) => f !== file));
+      setCheckedFiles(checkedFiles.filter((f) => f !== file.fileName));
     }
   };
 
   const rowClick = () => {
-    const checked = !isChecked;
-    setChecked(!isChecked);
+    const checked = !file.checked;
+    file.checked = !file.checked;
 
     if (checked) {
       // add to array
-      setCheckedFiles([...checkedFiles, file]);
+      setCheckedFiles([...checkedFiles, file.fileName]);
     } else {
       // remove from array
-      setCheckedFiles(checkedFiles.filter((f) => f !== file));
+      setCheckedFiles(checkedFiles.filter((f) => f !== file.fileName));
     }
   };
 
@@ -112,7 +114,7 @@ function FileRow({
         <Checkbox
           id={`fileCheckBox_${index}`}
           size="small"
-          checked={isChecked}
+          checked={file.checked}
           onChange={handleCheckboxChange}
         />
       </StyledTableCell>

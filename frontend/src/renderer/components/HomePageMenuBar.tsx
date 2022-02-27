@@ -15,7 +15,7 @@ function HomePageMenuBar({ setFoundFiles }: HomePageMenuBarProps) {
 
   const openDialog = () => {
     ipcRenderer.on('open-dialog', (_event, arg) => {
-      if (arg && !arg.cancelled) {
+      if (arg && !arg.canceled) {
         // assume one filePath
         setDirectoryPath(arg.filePaths[0]);
       }
@@ -28,7 +28,10 @@ function HomePageMenuBar({ setFoundFiles }: HomePageMenuBarProps) {
 
     ipcRenderer.on('search-volume', (_event, arg) => {
       if (arg) {
-        setFoundFiles(arg);
+        // add checked argument to args
+        const result = arg.map((fileName: string) => ({ fileName: fileName, checked: false }));
+
+        setFoundFiles(result);
       }
     });
 

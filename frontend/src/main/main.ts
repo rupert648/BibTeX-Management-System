@@ -42,7 +42,7 @@ ipcMain.on('open-dialog', async (event, _arg) => {
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on('select-file', async (event, _arg) => {
-  const result = await dialog.showOpenDialog({ properties: ['promptToCreate'] });
+  const result = await dialog.showOpenDialog({ properties: ['promptToCreate', 'openFile'] });
   event.reply('select-file', result);
 });
 
@@ -65,7 +65,11 @@ ipcMain.on('merge', async (event, arg) => {
   // TODO: tinker
   const threshold = 0.28;
   const { files, resultPath } = arg;
+
+  console.log({files, resultPath, threshold});
+
   const result = backend.mergeBibTexFiles(files, resultPath, threshold);
+
   console.log(result);
 
   event.reply('merge-response', result);

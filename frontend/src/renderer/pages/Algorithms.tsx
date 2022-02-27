@@ -4,7 +4,6 @@ import { Container, Stack } from '@mui/material';
 
 import ThresholdSlider from 'renderer/components/ThresholdSlider';
 import ScoreArea from 'renderer/components/ScoreArea';
-import { Label } from '@mui/icons-material';
 
 function Algorithms() {
     const [algorithmChoice, setAlgorithmChoice] = useState("levenshtein");
@@ -42,7 +41,7 @@ function Algorithms() {
                     </Select>
                 </FormControl>
 
-                <ThresholdSlider value={value} setValue={setValue} />
+                <ThresholdSlider value={value} setValue={setValue} algorithm={algorithmChoice} />
                 <Divider />
 
                 <Stack direction="row" spacing={2} sx={{
