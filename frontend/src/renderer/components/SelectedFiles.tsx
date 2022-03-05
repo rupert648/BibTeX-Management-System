@@ -164,7 +164,7 @@ function SelectedFiles({
     const { checked } = event.target;
     setChecked(checked);
 
-    setUpdateChecked(checked);
+    setUpdateChecked(!checked);
     if (checked) {
       setCheckedFiles(foundFiles.map(f => f.fileName));
     } else {
@@ -189,7 +189,7 @@ function SelectedFiles({
             maxHeight: '500px',
           }}
         >
-        <EnhancedTableToolbar numSelected={checkedFiles.length} />
+        <EnhancedTableToolbar numSelected={checkedFiles.length} setCheckedFiles={setCheckedFiles} setChecked={setChecked} />
         <TableContainer >
           <Table stickyHeader sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>

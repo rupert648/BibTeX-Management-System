@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import { ipcRenderer } from 'electron';
 
 import EntryRow from '../components/EntryRow';
+import EntryModal from 'renderer/components/EntryModal';
 
 interface FilePageParams {
   file: string;
@@ -38,6 +39,10 @@ type Entry = {
 function FilePage({ file, setFileOpen }: FilePageParams) {
   const [entries, setEntries] = useState([]);
 
+  // modal
+  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
   useEffect(() => {
     // on load get entries
     ipcRenderer.on('parse-bibtex-file-1', (_event, arg) => {
@@ -51,7 +56,7 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: theme.palette.primary.main,
       color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -60,7 +65,7 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
   }));
 
   const createEntryRow = (entry: Entry) => (
-    <EntryRow entry={entry} StyledTableCell={StyledTableCell} />
+    <EntryRow entry={entry} StyledTableCell={StyledTableCell} setModalOpen={setModalOpen} setSelectedEntry={setSelectedEntry}/>
   );
 
   const entriesToMap = () => {
@@ -72,22 +77,23 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
 
   return (
     <Stack>
-      <Button onClick={() => setFileOpen(false)} />
+      <Button onClick={() => setFileOpen(false)} > Go Back </Button>
       <Container
         sx={{
           width: '100%',
           minHeight: '600px',
+          maxHeight: '1000px',
+          overflow: 'scroll',
         }}
       >
-        <TableContainer
-          component={Paper}
+        <Paper
           sx={{
             width: '100%',
-            overflow: 'scroll',
-            maxHeight: '700px',
+            // maxHeight: '500px',
           }}
         >
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableContainer sx={{ maxHeight: 600 }}>
+          <Table stickyHeader sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
                 <StyledTableCell>Entry Name</StyledTableCell>
@@ -97,10 +103,12 @@ function FilePage({ file, setFileOpen }: FilePageParams) {
                 <StyledTableCell align="right">Fields</StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>{entriesToMap().map(createEntryRow)}</TableBody>
+            <TableBody >{entriesToMap().map(createEntryRow)}</TableBody>
           </Table>
         </TableContainer>
+        </Paper>
       </Container>
+      <EntryModal modalOpen={modalOpen} setModalOpen={setModalOpen} selectedEntry={selectedEntry}/>
     </Stack>
   );
 }

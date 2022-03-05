@@ -1,5 +1,4 @@
-import React from 'react';
-import { Container } from '@mui/material';
+import { Container, TextField } from '@mui/material';
 
 interface HomeSubtitleProps {
   text: string;
@@ -14,7 +13,15 @@ function HomeSubtitle({ text }: HomeSubtitleProps) {
         padding: '15px 0 15px 0',
       }}
     >
-      <p>{text}</p>
+      <TextField
+          label="Selected File"
+          value={text}
+          sx={{
+            width: '100%',
+          }}
+          disabled
+          variant="outlined"
+        />
     </Container>
   );
 }
