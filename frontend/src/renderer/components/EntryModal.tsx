@@ -1,4 +1,4 @@
-import { Modal, Box, TableContainer, Table, TableHead, Paper, TableRow, TableCell, TableBody } from '@mui/material';
+import { Modal, TableContainer, Table, TableHead, Paper, TableRow, TableCell, TableBody } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 

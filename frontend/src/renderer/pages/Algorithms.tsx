@@ -20,12 +20,12 @@ function Algorithms() {
         'hamming',
         'levenshtein',
         'ngram',
-        'jenson shanning vector'
+        'jenson shannon vector'
     ];
 
     const displayValue = (): string => {
         switch (algorithmChoice) {
-            case 'jenson shanning vector':
+            case 'jenson shannon vector':
             case 'ngram':
                 return (value / 100).toFixed(2);
             default: return value.toString();

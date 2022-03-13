@@ -37,8 +37,8 @@ function ScoreArea({ algorithm, string1, string2, threshold }: ScoreAreaProps) {
             case 'ngram':
                 sendAlgRequest('ngram');
                 break;
-            case 'jenson shanning vector':
-                sendAlgRequest('jenson-shanning-vector');
+            case 'jenson shannon vector':
+                sendAlgRequest('jenson-shannon-vector');
                 break;
             default:
                 setScore(0);

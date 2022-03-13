@@ -79,7 +79,7 @@ ipcMain.on('merge', async (event, arg) => {
 //         'hamming',
 //         'levenshtein',
 //         'ngram',
-//         'jenson shanning vector'
+//         'jenson shannon vector'
 
 ipcMain.on('damerau-levenshtein', async (event, arg) => {
   const result = backend.damerauLevenshtein(arg.string1, arg.string2);
@@ -101,9 +101,9 @@ ipcMain.on('ngram', async (event, arg) => {
   event.reply('ngram', result);
 })
 
-ipcMain.on('jenson-shanning-vector', async (event, arg) => {
-  const result = backend.jensonShanningVector(arg.string1, arg.string2);
-  event.reply('jenson-shanning-vector', result);
+ipcMain.on('jenson-shannon-vector', async (event, arg) => {
+  const result = backend.jensonshannonVector(arg.string1, arg.string2);
+  event.reply('jenson-shannon-vector', result);
 })
 
 if (process.env.NODE_ENV === 'production') {

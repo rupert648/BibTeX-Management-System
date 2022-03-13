@@ -10,7 +10,7 @@ use crate::string_matchers::{
     hamming,
     levenshtein,
     ngram,
-    jenson_shanning_vector
+    jenson_shannon_vector
 };
 use crate::parser::bibtex_parser::ParseResult;
 
@@ -207,14 +207,14 @@ pub fn ngram(mut cx: FunctionContext) -> JsResult<JsNumber> {
 /// Given two strings, uses a vector space distance algorithm to calculate a value between them.
 /// Adapted from Richard Connor et al's equivalent algorithm originally implemented in java,
 /// described in the paper "Modelling String Structure in Vector Spaces" by Richard Connor, Alan Dearle, and Lucia Vadicamo.
-pub fn jenson_shanning_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
+pub fn jenson_shannon_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1_handle = cx.argument::<JsString>(0)?;
     let string2_handle = cx.argument::<JsString>(1)?;
     
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
 
-    let result = jenson_shanning_vector::compute(&string1, &string2);
+    let result = jenson_shannon_vector::compute(&string1, &string2);
 
     Ok(cx.number(result))
 }
@@ -240,7 +240,7 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("levenshtein", levenshtein)?;
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
     cx.export_function("ngram", ngram)?;
-    cx.export_function("jensonShanningVector", jenson_shanning_vector)?;
+    cx.export_function("jensonshannonVector", jenson_shannon_vector)?;
     cx.export_function("getFileSize", get_file_size)?;
     Ok(())
 }

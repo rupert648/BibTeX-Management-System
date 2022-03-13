@@ -1,6 +1,5 @@
 use crate::datatypes::bibentry::BibEntry;
 use crate::datatypes::field::Field;
-use crate::error::{print_error_message};
 use crate::parser::bibtex_sanitiser;
 use neon::prelude::*;
 use std::str::Chars;
