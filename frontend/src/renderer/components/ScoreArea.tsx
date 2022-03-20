@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
-import { Typography, Button, TableContainer, Table, TableRow, TableCell, TableBody } from '@mui/material';
+import { Button, TableContainer, Table, TableRow, TableCell, TableBody } from '@mui/material';
 
 interface ScoreAreaProps {
     algorithm: string,
@@ -13,8 +13,10 @@ function ScoreArea({ algorithm, string1, string2, threshold }: ScoreAreaProps) {
     const [score, setScore] = useState(0);
 
     const sendAlgRequest = (route: string) => {
+        console.log(route);
         ipcRenderer.on(route, (_event, arg) => {
             if (arg) {
+                console.log(arg);
               setScore(arg);
             }
           });
@@ -33,6 +35,9 @@ function ScoreArea({ algorithm, string1, string2, threshold }: ScoreAreaProps) {
                 break;
             case 'levenshtein':
                 sendAlgRequest('levenshtein');
+                break;
+            case 'jaro winkler':
+                sendAlgRequest('jaroWinkler');
                 break;
             case 'ngram':
                 sendAlgRequest('ngram');

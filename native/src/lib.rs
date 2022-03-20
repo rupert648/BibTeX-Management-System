@@ -9,6 +9,7 @@ use crate::string_matchers::{
     damerau_levenshtein,
     hamming,
     levenshtein,
+    jaro_winkler,
     ngram,
     jenson_shannon_vector
 };
@@ -60,10 +61,7 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
     let path_list = utility::js_string_array_to_vec(path_list_js_array, &mut cx)?;
     let output_file_path = js_output_file_path.value(&mut cx);
     let threshold = js_threshold.value(&mut cx) as f64;
-    // if path_list.len() <= 1 {
-    //     // TODO: create another function for performing same duplication tests on single string
-    //     return error::create_error_object(String::from("Only 1 File Submitted"), &mut cx)
-    // }
+
     if !utility::is_files_all_valid(&path_list) {
         return error::create_error_object(String::from("Invalid File Type Found"), &mut cx)
     }
@@ -78,7 +76,6 @@ pub fn merge_bibtex_files(mut cx: FunctionContext) -> JsResult<JsObject> {
 
     entries = duplicate::remove_direct_duplicates(entries)?;
     entries = duplicate::remove_highly_similar_duplicates(entries, threshold)?;
-    // TODO: check if is empty to prevent writing empty file - these checks can also be done frontend
 
     file_writer::write_entries_to_file(entries, output_file_path)?;
 
@@ -120,7 +117,6 @@ pub fn remove_duplicates_from_bibtex_string(mut cx: FunctionContext) -> JsResult
 ///}
 /// ```
 pub fn parse_bibtex_file(mut cx: FunctionContext) -> JsResult<JsObject> {
-    // TODO: check all paths are .bib files
     let path_arg = cx.argument::<JsString>(0)?;
     let path = path_arg.value(&mut cx);
 
@@ -184,6 +180,24 @@ pub fn damerau_levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+/// Given two strings, computes the jaro winkler function for distance between them
+/// 
+/// Given two strings, uses the jaro winkler function to return a score between 0 and 1 between them
+/// 0 identifies two identical strings, 1 means they have no similarities
+/// Good function for shorter strings
+pub fn jaro_winkler(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+
+    // 1 - to match expected format
+    let result = 1.0 - jaro_winkler::compute(&string1, &string2);
+
+    Ok(cx.number(result))
+}
+
 /// Given two strings, computes an ngram-based distance value between them
 /// 
 /// Given two strings, uses an ngram based distance algorithm to calculate a value between them.
@@ -239,6 +253,7 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("hamming", hamming)?;
     cx.export_function("levenshtein", levenshtein)?;
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
+    cx.export_function("jaroWinkler", jaro_winkler)?;
     cx.export_function("ngram", ngram)?;
     cx.export_function("jensonshannonVector", jenson_shannon_vector)?;
     cx.export_function("getFileSize", get_file_size)?;

@@ -71,6 +71,7 @@ impl BibEntry {
         bib.push('{');
             bib.push_str(&self.name);
             bib.push(',');
+            bib.push('\n');
             for field in &self.fields {
                 bib.push_str(&field.field_name);
                 bib.push('=');
@@ -78,6 +79,7 @@ impl BibEntry {
                 bib.push_str(&field.field_value);
                 bib.push('}');
                 bib.push(',');
+                bib.push('\n');
             }
         bib.push('}');
 

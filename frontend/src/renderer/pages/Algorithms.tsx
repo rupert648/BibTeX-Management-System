@@ -19,6 +19,7 @@ function Algorithms() {
         'damerau_levenshtein',
         'hamming',
         'levenshtein',
+        'jaro winkler',
         'ngram',
         'jenson shannon vector'
     ];
@@ -26,6 +27,7 @@ function Algorithms() {
     const displayValue = (): string => {
         switch (algorithmChoice) {
             case 'jenson shannon vector':
+            case 'jaro winkler':
             case 'ngram':
                 return (value / 100).toFixed(2);
             default: return value.toString();

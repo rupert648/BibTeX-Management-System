@@ -17,7 +17,7 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
         }
     }
 
-    // if either smaller than ngram, just do hamming
+    // if either smaller than ngram size, just do hamming
     if source_len < ngram_size.try_into().unwrap() || target_len < ngram_size.try_into().unwrap() {
         return (hamming::compute(source, target)/cmp::max(source_len as i32, target_len as i32)) as f64;
     }
@@ -78,7 +78,10 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
                 }
             }
             let ec = (cost/tn) as f64;
-            d[i] = min_f64(min_f64(d[i-1]+1.0, p[i]+1.0), p[i-1]+ec);
+            d[i] = min_f64(
+                min_f64(d[i-1]+1.0, p[i]+1.0),
+                p[i-1]+ec
+            );
         }
 
         _swapper = p;

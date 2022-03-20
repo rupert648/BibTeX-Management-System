@@ -96,6 +96,11 @@ ipcMain.on('levenshtein', async (event, arg) => {
   event.reply('levenshtein', result);
 })
 
+ipcMain.on('jaroWinkler', async (event, arg) => {
+  const result = backend.jaroWinkler(arg.string1, arg.string2);
+  event.reply('jaroWinkler', result);
+})
+
 ipcMain.on('ngram', async (event, arg) => {
   const result = backend.ngram(arg.string1, arg.string2, 2);
   event.reply('ngram', result);

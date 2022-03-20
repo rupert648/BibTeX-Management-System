@@ -18,7 +18,6 @@ pub fn remove_direct_duplicates(entries: Vec<BibEntry>) -> NeonResult<Vec<BibEnt
 
 
 pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) -> NeonResult<Vec<BibEntry>> {
-    // TODO: remove any none ASCII chars to make jenson shannon not break
     let mut entries_cleaned: Vec<BibEntry> = Vec::new();
 
     let mut is_removed_arr: Vec<bool> = Vec::new();
@@ -29,7 +28,6 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
 
     for i in 0..entries.len() {
 
-        // TODO: worth removing this line?
         if is_removed_arr[i] { continue; }
 
         for j in (i+1)..entries.len() {

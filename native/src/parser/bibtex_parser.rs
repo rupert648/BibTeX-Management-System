@@ -30,6 +30,7 @@ fn parse_entries(bibtex_string: String) -> NeonResult<ParseResult> {
                 Ok(bib_entry_no_error) => entries_parsed.push(bib_entry_no_error),
                 // ignore error and continue to parse rest of file
                 Err(_) => {
+                    // annotate to user if error within file
                     parse_success = false;
                     continue;
                 },
@@ -87,12 +88,7 @@ fn consume_entry_name(mut entry_iterator: Chars, entry_type: String) -> NeonResu
     consume_fields(entry_iterator, entry_type, name)
 }
 
-// Disgusting function :)) TODO: Break this function down (might be very difficult due to iterator)
-fn consume_fields(entry_iterator: Chars, entry_type: String, name: String) -> NeonResult<BibEntry> {
-    // let mut fields_string = entry_iterator.as_str().trim();
-    // // remove last char
-    // fields_string = &fields_string[..fields_string.len() - 1];
-    
+fn consume_fields(entry_iterator: Chars, entry_type: String, name: String) -> NeonResult<BibEntry> {    
     let mut fields: Vec<Field> = Vec::new();
 
     // flags
@@ -138,7 +134,6 @@ fn consume_fields(entry_iterator: Chars, entry_type: String, name: String) -> Ne
             field_value = String::new();
             bracket_count=0;
             quote_count=0;
-
 
             // swap flags
             is_field_name = true;
