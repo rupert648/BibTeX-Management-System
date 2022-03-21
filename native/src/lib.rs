@@ -9,6 +9,7 @@ use crate::string_matchers::{
     damerau_levenshtein,
     hamming,
     levenshtein,
+    wagner_fischer,
     jaro_winkler,
     ngram,
     jenson_shannon_vector
@@ -162,6 +163,22 @@ pub fn levenshtein(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+/// Given two strings, computes the levenshtein difference between them
+/// 
+/// Computes the levenshtein edit distance between two strings
+/// implemented using teh wagner fischer dynamic programming algorithm
+pub fn wagner_fischer(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+
+    let result = wagner_fischer::compute(&string1, &string2);
+
+    Ok(cx.number(result))
+}
+
 /// Given two strings, computes the damerau levenshtein difference between them
 /// 
 /// Given two strings, uses the damerau levenshtein algorithm to work out the distance between them
@@ -252,6 +269,7 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("removeDuplicatesFromBibtexString", remove_duplicates_from_bibtex_string)?;
     cx.export_function("hamming", hamming)?;
     cx.export_function("levenshtein", levenshtein)?;
+    cx.export_function("wagnerFischer", wagner_fischer)?;
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
     cx.export_function("jaroWinkler", jaro_winkler)?;
     cx.export_function("ngram", ngram)?;
