@@ -43,7 +43,7 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
     p = vec![0.0; source_len+1];
     d = vec![0.0; source_len+1];
 
-    // jth ngram of t
+    // jth ngram of target
     let mut t_j = vec![special; n];
 
     for i in 0..source_len+1 {

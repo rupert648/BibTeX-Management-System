@@ -15,5 +15,8 @@
   "devDependencies": {
     "cargo-cp-artifact": "^0.1",
     "electron-rebuild": "^3.2.7"
+  },
+  "dependencies": {
+    "performance-now": "^2.1.0"
   }
 }

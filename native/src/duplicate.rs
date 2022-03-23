@@ -1,6 +1,6 @@
 use neon::prelude::*;
 use crate::datatypes::bibentry::BibEntry;
-use crate::jenson_shannon_vector;
+use crate::jensen_shannon_vector;
 
 pub fn remove_direct_duplicates(entries: Vec<BibEntry>) -> NeonResult<Vec<BibEntry>> {
     let mut entries_cleaned: Vec<BibEntry> = Vec::new();
@@ -44,8 +44,8 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
             let entry2_author = entry2.get_field("author");
             let entry2_title = entry2.get_field("title");
             
-            let author_score = jenson_shannon_vector::compute(&entry1_author, &entry2_author);
-            let title_score = jenson_shannon_vector::compute(&entry1_title, &entry2_title); 
+            let author_score = jensen_shannon_vector::compute(&entry1_author, &entry2_author);
+            let title_score = jensen_shannon_vector::compute(&entry1_title, &entry2_title); 
             
             // compute average score
             let score = (author_score + title_score) / 2.0;

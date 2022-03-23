@@ -57,7 +57,7 @@ fn string_to_sparse_array(s: &str, js_instance: &JS) -> SparseProbabilityArray {
 
     let mut ch1: char = '\0';
     let mut ch2: char = s.chars().nth(0).unwrap();
-    spa_add_event((ch1 as i32) * js_instance.char_val_upb + (ch2 as i32), 1, &mut spa);
+    spa_add_event((ch1 as i32) * js_instance.char_val_upb + (ch2 as i32), 2, &mut spa);
 
     for i in 0..(s.len() as i32) {
         ch1 = match s.chars().nth(i as usize) {
@@ -70,7 +70,6 @@ fn string_to_sparse_array(s: &str, js_instance: &JS) -> SparseProbabilityArray {
         };
         spa_add_event(ch1 as i32, 2, &mut spa);
         if (ch1 as i32) > js_instance.char_val_upb || ch1 == '\0' {
-            // ahhhh
             panic!();
         }
 

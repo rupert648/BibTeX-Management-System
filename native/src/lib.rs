@@ -11,8 +11,9 @@ use crate::string_matchers::{
     levenshtein,
     wagner_fischer,
     jaro_winkler,
+    lcs,
     ngram,
-    jenson_shannon_vector
+    jensen_shannon_vector
 };
 use crate::parser::bibtex_parser::ParseResult;
 
@@ -215,6 +216,22 @@ pub fn jaro_winkler(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(result))
 }
 
+/// Given two strings, computes the longest common subsequence (LCS) between them
+/// 
+/// Uses an implementation of a well known dynamic programming based LCS algorithm
+/// to compute the longest common subsequence between two given strings
+pub fn lcs(mut cx: FunctionContext) -> JsResult<JsNumber> {
+    let string1_handle = cx.argument::<JsString>(0)?;
+    let string2_handle = cx.argument::<JsString>(1)?;
+    
+    let string1 = string1_handle.value(&mut cx);
+    let string2 = string2_handle.value(&mut cx);
+
+    let result = lcs::compute(&string1, & string2);
+
+    Ok(cx.number(result))
+}
+
 /// Given two strings, computes an ngram-based distance value between them
 /// 
 /// Given two strings, uses an ngram based distance algorithm to calculate a value between them.
@@ -245,7 +262,7 @@ pub fn jenson_shannon_vector(mut cx: FunctionContext) -> JsResult<JsNumber> {
     let string1 = string1_handle.value(&mut cx);
     let string2 = string2_handle.value(&mut cx);
 
-    let result = jenson_shannon_vector::compute(&string1, &string2);
+    let result = jensen_shannon_vector::compute(&string1, &string2);
 
     Ok(cx.number(result))
 }
@@ -272,6 +289,7 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("wagnerFischer", wagner_fischer)?;
     cx.export_function("damerauLevenshtein", damerau_levenshtein)?;
     cx.export_function("jaroWinkler", jaro_winkler)?;
+    cx.export_function("lcs", lcs)?;
     cx.export_function("ngram", ngram)?;
     cx.export_function("jensonshannonVector", jenson_shannon_vector)?;
     cx.export_function("getFileSize", get_file_size)?;
