@@ -48,9 +48,20 @@ impl Eq for BibEntry {}
 
 impl Hash for BibEntry {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        self.entry_type.hash(state);
-        self.name.hash(state);
-        self.fields.hash(state);
+        let author = self.get_field("author");
+        let title = self.get_field("title");
+
+        // if we have author and title field use this to decide unique
+        if let (Some(a), Some(t)) = (author, title) {
+            // hash by these values
+            a.hash(state);
+            t.hash(state);
+        } else {
+            // hash by rest of the entry
+            self.entry_type.hash(state);
+            self.name.hash(state);
+            self.fields.hash(state);
+        }
     }
 }
 
@@ -98,14 +109,14 @@ impl BibEntry {
         bib
     }
 
-    pub fn get_field(&self, field_name: &str) -> String {
+    pub fn get_field(&self, field_name: &str) -> Option<String> {
         let field_item = self.fields.iter().find(|&field| field.field_name.to_lowercase() == field_name);
 
-        let unwrapped_val = match field_item {
-            Some(entry) => entry.to_owned().field_value,
-            None => String::from(""),
+        let val = match field_item {
+            Some(entry) => Some(entry.to_owned().field_value),
+            None => None,
         };
 
-        unwrapped_val
+        val
     }
 }

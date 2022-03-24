@@ -41,11 +41,23 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
             let entry2 = entries.get(j).unwrap();
 
             // grab relevant fields
-            let entry1_author = entry1.get_field("author");
-            let entry1_title = entry1.get_field("title");
+            let entry1_author = match entry1.get_field("author") {
+                Some(val) => val,
+                None => String::from("")
+            };
+            let entry1_title = match entry1.get_field("title") {
+                Some(val) => val,
+                None => String::from("")
+            };
 
-            let entry2_author = entry2.get_field("author");
-            let entry2_title = entry2.get_field("title");
+            let entry2_author = match entry2.get_field("author") {
+                Some(val) => val,
+                None => String::from("")
+            };
+            let entry2_title = match entry2.get_field("title") {
+                Some(val) => val,
+                None => String::from("")
+            };
             
             let author_score = jensen_shannon_vector::compute(&entry1_author, &entry2_author);
             let title_score = jensen_shannon_vector::compute(&entry1_title, &entry2_title); 
