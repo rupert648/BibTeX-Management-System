@@ -1,3 +1,5 @@
+use std::hash::{Hash, Hasher};
+
 pub use crate::datatypes::field::Field;
 use neon::prelude::*;
 
@@ -39,6 +41,16 @@ impl PartialEq for BibEntry {
         is_fields_same &&
         self.entry_type == other.entry_type &&
         self.name == other.name
+    }
+}
+
+impl Eq for BibEntry {}
+
+impl Hash for BibEntry {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.entry_type.hash(state);
+        self.name.hash(state);
+        self.fields.hash(state);
     }
 }
 

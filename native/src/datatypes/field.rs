@@ -1,9 +1,18 @@
+use std::hash::{Hash, Hasher};
+
 use neon::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct Field {
     pub field_name: String,
     pub field_value: String
+}
+
+impl Hash for Field {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.field_name.hash(state);
+        self.field_value.hash(state);
+    }
 }
 
 impl Field {

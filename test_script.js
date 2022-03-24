@@ -14,10 +14,10 @@ for (let i = 1000; i < 50000; i += 100) {
     }
 
     let start = now()
-    x.jensonshannonVector(s1, s2);
+    x.ngram(s1, s2, 2);
     let end = now()
     
     let string = `${i},${end-start}\n`;
 
-    fs.appendFileSync('./test.csv', string);
+    fs.appendFileSync('./data/ngramComplexityResults.csv', string);
 }

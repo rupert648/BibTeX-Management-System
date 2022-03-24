@@ -1,0 +1,41 @@
+group,str1,str2,algorithm,score,timeTaken
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung} and {J.-H. Jourdan} and {R. Krebbers} and {D. Dreyer}",wagnerFischer,47,23.961166977882385
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung} and {J.-H. Jourdan} and {R. Krebbers} and {D. Dreyer}",jaroWinkler,0.6274430014430015,15.173290967941284
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung} and {J.-H. Jourdan} and {R. Krebbers} and {D. Dreyer}",ngram,0.4805194805194805,1.6603749990463257
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung} and {J.-H. Jourdan} and {R. Krebbers} and {D. Dreyer}",jensonshannonVector,0.5181959118931818,1.5597090125083923
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","Ralf Jung and Jacques-Henri Jourdan and Robbert Krebbers and Derek Dreyer",wagnerFischer,39,29.429665982723236
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","Ralf Jung and Jacques-Henri Jourdan and Robbert Krebbers and Derek Dreyer",jaroWinkler,0.6481739903931685,19.885042011737823
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","Ralf Jung and Jacques-Henri Jourdan and Robbert Krebbers and Derek Dreyer",ngram,0.36363636363636365,1.651291012763977
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","Ralf Jung and Jacques-Henri Jourdan and Robbert Krebbers and Derek Dreyer",jensonshannonVector,0.22411721998804776,1.4411659836769104
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung, J.-H. Jourdan, R. Krebbers, and D. Dreyer}",wagnerFischer,46,18.555000007152557
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung, J.-H. Jourdan, R. Krebbers, and D. Dreyer}",jaroWinkler,0.5906748251748252,9.224708020687103
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung, J.-H. Jourdan, R. Krebbers, and D. Dreyer}",ngram,0.5064935064935064,1.2478329539299011
+1,"Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek","{R. Jung, J.-H. Jourdan, R. Krebbers, and D. Dreyer}",jensonshannonVector,0.4380098220978361,1.145916998386383
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor} and {A. Dearle} and {L. Vadicamo}",wagnerFischer,19,7.634374976158142
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor} and {A. Dearle} and {L. Vadicamo}",jaroWinkler,0.6517614512471656,5.2132920026779175
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor} and {A. Dearle} and {L. Vadicamo}",ngram,0.32653061224489793,0.6798749566078186
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor} and {A. Dearle} and {L. Vadicamo}",jensonshannonVector,0.4724907372657587,0.7090409994125366
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","Connor, Richard and Dearle, Alan and Vadicamo, Lucia",wagnerFischer,33,9.35970801115036
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","Connor, Richard and Dearle, Alan and Vadicamo, Lucia",jaroWinkler,0.5998029827315541,5.9488749504089355
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","Connor, Richard and Dearle, Alan and Vadicamo, Lucia",ngram,0.5,0.7617500424385071
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","Connor, Richard and Dearle, Alan and Vadicamo, Lucia",jensonshannonVector,0.2546726950696174,0.7774580121040344
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor, A. Dearle, and L. Vadicamo}",wagnerFischer,20,6.221292018890381
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor, A. Dearle, and L. Vadicamo}",jaroWinkler,0.6352391418105703,3.927000045776367
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor, A. Dearle, and L. Vadicamo}",ngram,0.32653061224489793,0.6176249980926514
+2,"Richard Connor and Alan Dearle and Lucia Vadicamo","{R. Connor, A. Dearle, and L. Vadicamo}",jensonshannonVector,0.4569436193243589,0.6896660327911377
+3,"Turing, Alan M","{A. M. Turing}",wagnerFischer,13,0.2720000147819519
+3,"Turing, Alan M","{A. M. Turing}",jaroWinkler,0.6182857142857143,0.13629096746444702
+3,"Turing, Alan M","{A. M. Turing}",ngram,0.7857142857142857,0.07120800018310547
+3,"Turing, Alan M","{A. M. Turing}",jensonshannonVector,0.612191016604092,0.15520799160003662
+3,"Turing, Alan M","Alan M Turing",wagnerFischer,12,0.24583297967910767
+3,"Turing, Alan M","Alan M Turing",jaroWinkler,0.6164505494505494,0.12483298778533936
+3,"Turing, Alan M","Alan M Turing",ngram,0.6428571428571429,0.0668330192565918
+3,"Turing, Alan M","Alan M Turing",jensonshannonVector,0.34220864193090933,0.15099996328353882
+4,"Albert Einstein","Albert Einstien",wagnerFischer,2,0.3251670002937317
+4,"Albert Einstein","Albert Einstien",jaroWinkler,0.05223999999999995,0.05500000715255737
+4,"Albert Einstein","Albert Einstien",ngram,0.06666666666666667,0.08195799589157104
+4,"Albert Einstein","Albert Einstien",jensonshannonVector,0.2362182658600321,0.17012500762939453
+4,"Albert Einstein","Alborto Entien",wagnerFischer,6,0.29191696643829346
+4,"Albert Einstein","Alborto Entien",jaroWinkler,0.3431333333333333,0.10649996995925903
+4,"Albert Einstein","Alborto Entien",ngram,0.26666666666666666,0.07383400201797485
+4,"Albert Einstein","Alborto Entien",jensonshannonVector,0.5335523800148981,0.16612499952316284

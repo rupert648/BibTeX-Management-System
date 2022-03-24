@@ -1,0 +1,67 @@
+{
+    "testAuthorStrings": [
+        {
+            "group": 1,
+            "values": [
+                "Jung, Ralf and Jourdan, Jacques-Henri and Krebbers, Robbert and Dreyer, Derek",
+                "{R. Jung} and {J.-H. Jourdan} and {R. Krebbers} and {D. Dreyer}",
+                "Ralf Jung and Jacques-Henri Jourdan and Robbert Krebbers and Derek Dreyer",
+                "{R. Jung, J.-H. Jourdan, R. Krebbers, and D. Dreyer}"
+            ]
+        },
+        {
+            "group": 2,
+            "values": [
+                "Richard Connor and Alan Dearle and Lucia Vadicamo",
+                "{R. Connor} and {A. Dearle} and {L. Vadicamo}",
+                "Connor, Richard and Dearle, Alan and Vadicamo, Lucia",
+                "{R. Connor, A. Dearle, and L. Vadicamo}"
+            ]
+        },
+        {
+            "group": 3,
+            "values": [
+                "Turing, Alan M",
+                "{A. M. Turing}",
+                "Alan M Turing"
+            ]
+        },
+        {
+            "group": 4,
+            "values": [
+                "Albert Einstein",
+                "Albert Einstien",
+                "Alborto Entien"
+            ]
+        }
+    ],
+
+    "testTitleStrings": [
+        {
+            "group": 1,
+            "values": [
+                "The Life of {Albert} {Einstein}",
+                "The Life of {A}lbert {E}instein",
+                "{The Life of Albert Einstein}",
+                "The Life of albert einstein"
+            ]
+        },
+        {
+            "group": 2,
+            "values": [
+                "Modelling {String} {Structure} in {Vector} {Spaces}",
+                "Modelling {S}tring {S}tructure in {V}ector {S}paces",
+                "{Modelling String Structure in Vector Spaces}",
+                "modelling string structure in vector spaces"
+            ]
+        },
+        {
+            "group" : 3,
+            "values": [
+                "Computing Patterns In Strings",
+                "Computing Patturns In Strings",
+                "cmputing patterns in strngs"
+            ]
+        }
+    ]
+}

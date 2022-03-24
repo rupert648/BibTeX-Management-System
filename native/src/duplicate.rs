@@ -1,18 +1,21 @@
+use std::collections::HashMap;
+
 use neon::prelude::*;
 use crate::datatypes::bibentry::BibEntry;
 use crate::jensen_shannon_vector;
 
 pub fn remove_direct_duplicates(entries: Vec<BibEntry>) -> NeonResult<Vec<BibEntry>> {
-    let mut entries_cleaned: Vec<BibEntry> = Vec::new();
+    let mut entries_hash: HashMap<BibEntry, i32> = HashMap::new();
 
     // simply checks for duplicates
     for entry in entries.iter() {
-        if !entries_cleaned.contains(entry) {
-            entries_cleaned.push(entry.clone())
-        }
+        // inserts the entry into the map if doesn't exist, then increments
+        let counter = entries_hash.entry(entry.clone()).or_insert(0);
+        *counter += 1;
     }
 
-    Ok(entries_cleaned)
+    // collect keys back into hash and return
+    Ok(entries_hash.keys().cloned().collect::<Vec<BibEntry>>())
 }
 
 

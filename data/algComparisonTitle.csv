@@ -1,0 +1,33 @@
+group,str1,str2,algorithm,score,timeTaken
+1,"The Life of {Albert} {Einstein}","The Life of {A}lbert {E}instein",wagnerFischer,4,2.320207953453064
+1,"The Life of {Albert} {Einstein}","The Life of {A}lbert {E}instein",jaroWinkler,0.1798064516129032,0.9606670141220093
+1,"The Life of {Albert} {Einstein}","The Life of {A}lbert {E}instein",ngram,0.12903225806451613,0.29933303594589233
+1,"The Life of {Albert} {Einstein}","The Life of {A}lbert {E}instein",jensonshannonVector,0.25131234497501903,0.4182080030441284
+1,"The Life of {Albert} {Einstein}","{The Life of Albert Einstein}",wagnerFischer,4,2.120082974433899
+1,"The Life of {Albert} {Einstein}","{The Life of Albert Einstein}",jaroWinkler,0.5322513904338153,1.0197499990463257
+1,"The Life of {Albert} {Einstein}","{The Life of Albert Einstein}",ngram,0.12903225806451613,0.2822920083999634
+1,"The Life of {Albert} {Einstein}","{The Life of Albert Einstein}",jensonshannonVector,0.2431084857357423,0.3980419635772705
+1,"The Life of {Albert} {Einstein}","The Life of albert einstein",wagnerFischer,6,1.9187080264091492
+1,"The Life of {Albert} {Einstein}","The Life of albert einstein",jaroWinkler,0.38826523297491045,1.0039159655570984
+1,"The Life of {Albert} {Einstein}","The Life of albert einstein",ngram,0.12903225806451613,0.2701669931411743
+1,"The Life of {Albert} {Einstein}","The Life of albert einstein",jensonshannonVector,0.4057454698845315,0.381458044052124
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","Modelling {S}tring {S}tructure in {V}ector {S}paces",wagnerFischer,8,9.651916980743408
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","Modelling {S}tring {S}tructure in {V}ector {S}paces",jaroWinkler,0.3516470588235294,4.199500024318695
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","Modelling {S}tring {S}tructure in {V}ector {S}paces",ngram,0.1568627450980392,0.7663329839706421
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","Modelling {S}tring {S}tructure in {V}ector {S}paces",jensonshannonVector,0.2738324923452073,0.78125
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","{Modelling String Structure in Vector Spaces}",wagnerFischer,8,8.042167007923126
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","{Modelling String Structure in Vector Spaces}",jaroWinkler,0.554230065359477,4.910082995891571
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","{Modelling String Structure in Vector Spaces}",ngram,0.1568627450980392,0.6912500262260437
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","{Modelling String Structure in Vector Spaces}",jensonshannonVector,0.29233249958019186,0.7181249856948853
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","modelling string structure in vector spaces",wagnerFischer,13,7.662750005722046
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","modelling string structure in vector spaces",jaroWinkler,0.5228353853169174,4.750708997249603
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","modelling string structure in vector spaces",ngram,0.17647058823529413,0.6869170069694519
+2,"Modelling {String} {Structure} in {Vector} {Spaces}","modelling string structure in vector spaces",jensonshannonVector,0.4940375336428638,0.695792019367218
+3,"Computing Patterns In Strings","Computing Patturns In Strings",wagnerFischer,1,1.9464579820632935
+3,"Computing Patterns In Strings","Computing Patturns In Strings",jaroWinkler,0.012620689655172268,0.11891597509384155
+3,"Computing Patterns In Strings","Computing Patturns In Strings",ngram,0,0.26554203033447266
+3,"Computing Patterns In Strings","Computing Patturns In Strings",jensonshannonVector,0.19095009342218153,0.37645798921585083
+3,"Computing Patterns In Strings","cmputing patterns in strngs",wagnerFischer,6,1.761417031288147
+3,"Computing Patterns In Strings","cmputing patterns in strngs",jaroWinkler,0.6421123882503192,1.1012499928474426
+3,"Computing Patterns In Strings","cmputing patterns in strngs",ngram,0.10344827586206896,0.2561669945716858
+3,"Computing Patterns In Strings","cmputing patterns in strngs",jensonshannonVector,0.4316793216887349,0.35008299350738525

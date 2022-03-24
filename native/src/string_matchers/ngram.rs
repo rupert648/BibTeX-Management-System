@@ -9,12 +9,10 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
 
     let mut cost;
 
+    if source == target { return 0.0; }
+
     if source_len == 0 || target_len == 0 {
-        if source_len == target_len {
-            return 1.0;
-        } else {
-            return 0.0;
-        }
+        return 1.0;
     }
 
     // if either smaller than ngram size, just do hamming
@@ -89,7 +87,7 @@ pub fn compute(source: &str, target: &str, ngram_size: i32) -> f64 {
         d = _swapper;
     }
 
-    return 1.0 - (p[source_len] / cmp::max(target_len, source_len) as f64);
+    return p[source_len] / cmp::max(target_len, source_len) as f64;
 }
 
 fn min_f64(x: f64, y: f64) -> f64 {
