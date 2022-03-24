@@ -53,7 +53,7 @@ impl Hash for BibEntry {
 
         // if we have author and title field use this to decide unique
         if let (Some(a), Some(t)) = (author, title) {
-            // hash by these values
+            // hash by author and title values
             a.hash(state);
             t.hash(state);
         } else {

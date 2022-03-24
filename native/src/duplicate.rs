@@ -31,7 +31,11 @@ pub fn remove_highly_similar_duplicates(entries: Vec<BibEntry>, threshold: f64) 
 
     for i in 0..entries.len() {
 
-        if is_removed_arr[i] { continue; }
+        // if arr[i] = arr[j], then possible that arr[i] != arr[k]
+        // but arr[j] = arr[k].
+        // line below would prevent latter of two checks.
+        
+        // if is_removed_arr[i] { continue; }
 
         for j in (i+1)..entries.len() {
 
