@@ -86,6 +86,13 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
       }}
       >
         <Stack spacing={2}>
+          {checkedFiles.length < 1 ? (
+            <>
+              <h3>No Files Selected To Merge!</h3>
+              <LoadingButton variant="contained" color="error" disabled={isLoading} onClick={() => setModalOpen(!modalOpen)}>Cancel</LoadingButton>
+            </>
+          ) :
+          <>
           <h3>You wish to merge the following files</h3>
           <Table>
             {
@@ -114,6 +121,10 @@ function MergeModal({ modalOpen, setModalOpen, checkedFiles }: MergeModalProps) 
             <LoadingButton variant="contained" color="success" loading={isLoading} onClick={attemptToMerge}>Merge</LoadingButton>
             <LoadingButton variant="contained" color="error" disabled={isLoading} onClick={() => setModalOpen(!modalOpen)}>Cancel</LoadingButton>
           </Stack>
+          
+          </>}
+
+          
         </Stack>
         {
           mergeError

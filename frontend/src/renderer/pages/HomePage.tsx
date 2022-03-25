@@ -32,7 +32,7 @@ function HomePage() {
   }
 
   return (
-    <Stack sx={{ marginTop: "100px" }}>
+    <Stack sx={{ height:"50%", marginTop: "100px", overflow: 'scroll'}}>
       <HomePageMenuBar setFoundFiles={setFoundFiles} />
       <SelectedFiles
         foundFiles={foundFiles}

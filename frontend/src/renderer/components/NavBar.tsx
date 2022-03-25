@@ -75,7 +75,7 @@ function NavBar() {
         <Divider />
         <List>
             <ListItem button>
-              <Link to={'/'} style={{ textDecoration: 'none', display: 'inline-flex'}}>
+              <Link to={'/'} onClick={handleDrawerClose} style={{ textDecoration: 'none', display: 'inline-flex', color:'black'}}>
                 <ListItemIcon>
                   <HomeIcon />
                 </ListItemIcon>
@@ -85,7 +85,7 @@ function NavBar() {
               </Link>
             </ListItem>
             <ListItem button >
-             <Link to={'/algorithms'} style={{ textDecoration: 'none', display: 'inline-flex'}}>
+             <Link to={'/algorithms'} onClick={handleDrawerClose} style={{ textDecoration: 'none', display: 'inline-flex', color:'black'}}>
               <ListItemIcon>
                 <CodeIcon />
               </ListItemIcon>

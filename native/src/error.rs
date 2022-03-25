@@ -12,6 +12,6 @@ pub fn create_error_object<'a>(error_message: String, cx: &mut FunctionContext<'
 }
 
 // debugging
-pub fn print_error_message(error_message: String) {
+pub fn _print_error_message(error_message: String) {
     println!("----------\nerror: \n{}\n---------", error_message)
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/extensions */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Table,
@@ -28,6 +28,7 @@ import { styled } from '@mui/material/styles';
 // eslint-disable-next-line import/no-unresolved
 import FileRow from './FileRow';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
+import FilterToolbar from './FilterToolbar';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -116,9 +117,12 @@ function SelectedFiles({
   const [updateChecked, setUpdateChecked] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [filteredFiles, setFilteredFiles] = useState<Array<{fileName: string, checked: boolean}>>([]);
+
+  useEffect(() => setFilteredFiles(foundFiles), [foundFiles])
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - foundFiles.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredFiles.length) : 0;
 
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -166,7 +170,7 @@ function SelectedFiles({
 
     setUpdateChecked(!checked);
     if (checked) {
-      setCheckedFiles(foundFiles.map(f => f.fileName));
+      setCheckedFiles(filteredFiles.map(f => f.fileName));
     } else {
       setCheckedFiles([]);
     }
@@ -186,10 +190,11 @@ function SelectedFiles({
         <Paper
           sx={{
             width: '100%',
-            maxHeight: '500px',
+            maxHeight: '600px',
           }}
         >
         <EnhancedTableToolbar numSelected={checkedFiles.length} setCheckedFiles={setCheckedFiles} setChecked={setChecked} />
+        <FilterToolbar foundFiles={foundFiles} setFilteredFiles={setFilteredFiles} />
         <TableContainer >
           <Table stickyHeader sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
@@ -222,8 +227,8 @@ function SelectedFiles({
             >
               {
                 (rowsPerPage > 0
-                  ? foundFiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : foundFiles).map(createFileRow)
+                  ? filteredFiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredFiles).map(createFileRow)
               }
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
@@ -235,7 +240,7 @@ function SelectedFiles({
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                 colSpan={3}
-                count={foundFiles.length}
+                count={filteredFiles.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

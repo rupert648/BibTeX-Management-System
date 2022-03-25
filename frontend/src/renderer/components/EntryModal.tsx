@@ -41,7 +41,7 @@ function EntryModal({modalOpen, setModalOpen, selectedEntry}: EntryModalProps) {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <TableContainer component={Paper} sx={{maxWidth: '70%', margin: 'auto', marginTop: '25%', maxHeight: '500px', overflowX: 'scroll'}}>
+                <TableContainer component={Paper} sx={{maxWidth: '70%', margin: 'auto', marginTop: '15%', maxHeight: '500px', overflowX: 'scroll'}}>
                     <Table stickyHeader aria-label="simple table">
                         <TableHead>
                         <TableRow>
