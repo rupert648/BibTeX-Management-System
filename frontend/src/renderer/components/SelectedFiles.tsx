@@ -180,22 +180,17 @@ function SelectedFiles({
   return (
     <div>
       <Container
-        sx={{
-          width: '100%',
-          minHeight: '600px',
-          maxHeight: '1000px',
-          overflow: 'hidden',
-        }}
+        sx={{marginBottom: "20px"}}
       >
         <Paper
-          sx={{
-            width: '100%',
-            maxHeight: '600px',
-          }}
         >
         <EnhancedTableToolbar numSelected={checkedFiles.length} setCheckedFiles={setCheckedFiles} setChecked={setChecked} />
         <FilterToolbar foundFiles={foundFiles} setFilteredFiles={setFilteredFiles} />
-        <TableContainer >
+        <TableContainer 
+          sx={{
+            maxHeight: '500px'
+          }}
+        >
           <Table stickyHeader sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
@@ -222,6 +217,7 @@ function SelectedFiles({
             </TableHead>
             <TableBody
               sx={{
+                maxHeight: "200px",
                 overflow: 'scroll',
               }}
             >
@@ -236,8 +232,9 @@ function SelectedFiles({
                 </TableRow>
               )}
             </TableBody>
-            <TableFooter>
-              <TablePagination
+          </Table>
+        </TableContainer>
+        <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                 colSpan={3}
                 count={filteredFiles.length}
@@ -253,9 +250,6 @@ function SelectedFiles({
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
               />
-            </TableFooter>
-          </Table>
-        </TableContainer>
         </Paper>
       </Container>
     </div>

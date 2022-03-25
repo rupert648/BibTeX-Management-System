@@ -126,7 +126,7 @@ function FileRow({
         {getFileName()} 
       </StyledTableCell>
       <StyledTableCell align="right">{entries.length}</StyledTableCell>
-      <StyledTableCell align="right">{fileLength}</StyledTableCell>
+      <StyledTableCell align="right">{fileLength} bytes</StyledTableCell>
       <StyledTableCell align="right">
         <button
           type="button"
@@ -136,7 +136,7 @@ function FileRow({
             textDecoration: 'underline',
           }}
         >
-          See More
+          View Contents
         </button>
       </StyledTableCell>
     </StyledTableRow>
