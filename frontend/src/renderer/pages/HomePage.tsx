@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Stack } from '@mui/material';
 
 import HomeSubtitle from '../components/HomeSubtitle';

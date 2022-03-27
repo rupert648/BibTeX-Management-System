@@ -11,7 +11,6 @@ import {
   TableRow,
   Checkbox,
   TablePagination,
-  TableFooter,
   IconButton,
   Box,
 } from '@mui/material';
