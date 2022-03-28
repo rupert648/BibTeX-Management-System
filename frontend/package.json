@@ -30,8 +30,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "BibTeX Manager",
+    "appId": "org.erb.BibTeXManager",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

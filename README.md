@@ -42,6 +42,19 @@ npm run start
 This should open a GUI in development mode, which will look something as follows
 ![GUI on load](./guionload.png)
 
+### Installing/Packaging the Project
+Once the above steps are completed, the following commands can be ran to build and install the project (done from the `/frontend`).
+```
+npm run build
+npm run package
+```
+This will build a compatable build for the local system. To build it specifically for an OS environment, this can be done with the following command
+```
+npm run package --[option]
+# Example: npm run package -- --mac
+```
+This will create a packaged app which can be installed inside the `/release` directory
+
 #### Testing scripts
 To run testing scrips, navigate to the base directory and run `npm install`.
 The two provided scripts can then be run as follows.
