@@ -62,8 +62,7 @@ ipcMain.on('parse-bibtex-file', async (event, arg) => {
 });
 
 ipcMain.on('merge', async (event, arg) => {
-  // TODO: tinker
-  const threshold = 0.28;
+  const threshold = 0.34;
   const { files, resultPath } = arg;
 
   console.log({files, resultPath, threshold});
