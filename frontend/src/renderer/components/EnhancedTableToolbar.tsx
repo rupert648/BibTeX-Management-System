@@ -42,7 +42,7 @@ function EnhancedTableToolbar({numSelected, setCheckedFiles, setChecked}: Enhanc
                 id="tableTitle"
                 component="div"
             >
-             Nutrition
+             Found Files
             </Typography>
         )}
         {numSelected > 0 && (
